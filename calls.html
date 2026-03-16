@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tringg — Calls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#fff;--bg:#f0ede8;
+  --teal:#7FE8D8;--yellow:#F5E642;--salmon:#F0A090;
+  --border:2px solid #0a0a0a;--shadow:4px 4px 0 #0a0a0a;--shadow-lg:6px 6px 0 #0a0a0a;
+  --nav-w:240px;
+}
+html,body{height:100%;background:var(--bg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* NAV */
+.nav{width:var(--nav-w);flex-shrink:0;background:var(--black);display:flex;flex-direction:column;padding:28px 0;overflow-y:auto}
+.nav-logo{padding:0 22px 26px;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:10px}
+.logo-box{width:36px;height:36px;background:var(--yellow);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-word{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.4px}
+.nav-sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;padding:18px 22px 8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 22px;cursor:pointer;color:#555;font-size:14px;font-weight:500;transition:all .18s;border-left:3px solid transparent}
+.nav-item:hover{color:#fff;background:#111}
+.nav-item.active{color:#fff;background:#141414;border-left-color:var(--yellow)}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px;background:#e55;color:#fff}
+.nav-outlet{margin-top:auto;padding:16px 22px 0;border-top:1px solid #1a1a1a}
+.outlet-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#3a3a3a;margin-bottom:8px}
+.outlet-sel{width:100%;background:#111;border:1px solid #2a2a2a;border-radius:9px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:9px 12px;appearance:none;outline:none}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.notif-btn{position:relative;width:38px;height:38px;border-radius:9px;background:#f9f8f5;border:2px solid #e0ddd5;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.n-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#e55;border-radius:50%;border:2px solid #fff}
+.avatar{width:38px;height:38px;border-radius:9px;background:var(--black);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--yellow);cursor:pointer}
+
+/* STATS */
+.stats-strip{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;display:flex;flex-shrink:0}
+.stat-pill{padding:14px 28px 14px 0;display:flex;align-items:center;gap:14px;border-right:2px solid #f0ede8;margin-right:28px}
+.stat-pill:last-child{border-right:none}
+.sp-icon{width:40px;height:40px;border-radius:10px;border:var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sp-teal{background:var(--teal)}.sp-yellow{background:var(--yellow)}.sp-salmon{background:var(--salmon)}.sp-white{background:#fff}
+.sp-val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--black);line-height:1}
+.sp-lbl{font-size:11px;color:#aaa;font-weight:500;margin-top:3px}
+
+/* CONTROLS */
+.controls{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;height:54px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.tabs{display:flex;height:100%}
+.tab{padding:0 16px;font-size:13px;font-weight:600;cursor:pointer;color:#999;border-bottom:3px solid transparent;display:flex;align-items:center;gap:8px;transition:all .18s;white-space:nowrap;user-select:none}
+.tab:hover{color:var(--black)}
+.tab.active{color:var(--black);border-bottom-color:var(--black)}
+.tab-count{font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px;border:2px solid}
+.tab.active .tab-count{background:var(--black);border-color:var(--black);color:#fff}
+.tab:not(.active) .tab-count{background:#f5f2ec;border-color:#ddd;color:#888}
+.controls-right{display:flex;align-items:center;gap:10px}
+.search-box{position:relative}
+.search-box input{background:#f9f8f5;border:2px solid #e0ddd5;border-radius:9px;padding:8px 14px 8px 34px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);outline:none;width:220px;transition:border-color .2s}
+.search-box input:focus{border-color:var(--black)}
+.search-box input::placeholder{color:#bbb}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;color:#bbb;pointer-events:none}
+.date-sel{font-size:12px;font-weight:600;padding:8px 14px;border-radius:9px;border:2px solid #e0ddd5;background:#fff;color:var(--black);cursor:pointer;font-family:'Inter',sans-serif;appearance:none;outline:none}
+
+/* CONTENT */
+.content-area{flex:1;display:flex;overflow:hidden}
+
+/* CALL LIST */
+.call-list-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.call-list{flex:1;overflow-y:auto;padding:20px 28px 80px;display:flex;flex-direction:column;gap:10px}
+
+/* scroll buttons */
+.scroll-btns{position:absolute;bottom:22px;right:22px;display:flex;flex-direction:column;gap:8px;z-index:10;opacity:0;pointer-events:none;transition:opacity .22s}
+.scroll-btns.visible{opacity:1;pointer-events:all}
+.scroll-btn{width:40px;height:40px;border-radius:12px;border:var(--border);background:var(--black);color:var(--yellow);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);transition:all .15s;font-family:Arial,sans-serif;font-weight:900}
+.scroll-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.scroll-btn:disabled{background:#ddd;border-color:#ccc;color:#aaa;cursor:default;box-shadow:none;transform:none}
+.scroll-indicator{position:absolute;bottom:22px;left:28px;font-size:11px;font-weight:700;color:#bbb;background:#fff;border:2px solid #e8e5de;border-radius:8px;padding:5px 10px;opacity:0;pointer-events:none;transition:opacity .22s}
+.scroll-indicator.visible{opacity:1}
+
+/* CALL CARD */
+.call-card{background:#fff;border:var(--border);border-radius:16px;box-shadow:var(--shadow);cursor:pointer;transition:all .18s;display:flex;align-items:stretch;overflow:hidden}
+.call-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.call-card.selected{box-shadow:var(--shadow-lg)}
+.card-stripe{width:5px;flex-shrink:0}
+.stripe-green{background:var(--teal)}.stripe-blue{background:#a8c4f8}.stripe-amber{background:var(--yellow)}.stripe-red{background:var(--salmon)}.stripe-grey{background:#ddd}
+.card-body{flex:1;padding:14px 18px;display:flex;align-items:center;gap:16px;min-width:0}
+.outcome-icon{width:40px;height:40px;border-radius:11px;border:var(--border);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.oi-green{background:var(--teal)}.oi-blue{background:#e8f0fe}.oi-amber{background:var(--yellow)}.oi-red{background:var(--salmon)}.oi-grey{background:#f5f5f5}
+.card-info{flex:1;min-width:0}
+.card-label{font-size:14px;font-weight:700;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-sub{font-size:12px;color:#999;margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.card-time{font-family:'Space Grotesk',monospace;font-size:12px;font-weight:600;color:#aaa}
+.card-dur{font-family:'Space Grotesk',monospace;font-size:15px;font-weight:800;color:var(--black)}
+
+/* BADGES */
+.badge{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:6px;border:2px solid;white-space:nowrap;display:inline-block}
+.badge-green{background:#e6f9ee;border-color:#a0dbb5;color:#1a6e3a}
+.badge-blue{background:#e8f0fe;border-color:#a8c4f8;color:#1a50a0}
+.badge-amber{background:#fff8e0;border-color:#f0c84a;color:#7a5a00}
+.badge-red{background:#fee5e5;border-color:#f9aaaa;color:#c00}
+.badge-grey{background:#f5f5f5;border-color:#ddd;color:#888}
+
+.resv-chip{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;background:#fffef0;border:2px solid #f0c84a;color:#7a5a00;cursor:pointer;white-space:nowrap}
+.resv-chip:hover{background:var(--yellow)}
+.dot{color:#ddd}
+
+/* EMPTY */
+.empty-state{padding:80px 32px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.empty-icon{font-size:48px}
+.empty-title{font-size:18px;font-weight:800;color:var(--black)}
+.empty-sub{font-size:14px;color:#aaa}
+
+/* SLIDE-OVER */
+.slideover{width:0;flex-shrink:0;background:#fff;border-left:2px solid #e5e2db;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.slideover.open{width:490px}
+.so-header{padding:20px 26px 16px;border-bottom:2px solid #f0ede8;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px}
+.so-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:var(--black);line-height:1.2}
+.so-meta{font-size:12px;color:#999;margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.so-close{width:30px;height:30px;border-radius:8px;border:2px solid #e0ddd5;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-family:'Inter',sans-serif}
+.so-close:hover{border-color:var(--black);background:#f5f2ec}
+.so-body{flex:1;overflow-y:auto;padding:22px 26px}
+
+/* PANEL COMPONENTS */
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.hero-cell{background:#f9f8f5;border:2px solid #e8e5de;border-radius:12px;padding:13px 15px}
+.hero-cell.teal{background:var(--teal);border-color:var(--black)}
+.hero-cell.yellow{background:var(--yellow);border-color:var(--black)}
+.hc-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:4px}
+.hero-cell.teal .hc-label,.hero-cell.yellow .hc-label{color:rgba(0,0,0,.45)}
+.hc-val{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.hc-sub{font-size:12px;color:#aaa;margin-top:2px}
+.hero-cell.teal .hc-sub,.hero-cell.yellow .hc-sub{color:rgba(0,0,0,.4)}
+
+.sec-hdr{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-hdr::after{content:'';flex:1;height:1px;background:#f0ede8}
+
+.tools-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tool-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 13px;border-radius:8px;border:var(--border);background:#fff;color:var(--black)}
+.tool-chip.used{background:var(--black);color:#fff}
+.tc-dot{width:7px;height:7px;border-radius:50%;background:#ddd;flex-shrink:0}
+.tool-chip.used .tc-dot{background:var(--teal)}
+
+.resv-box{background:#fffef0;border:2px solid #f0c84a;border-radius:12px;padding:13px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.resv-box-title{font-size:14px;font-weight:700;color:var(--black)}
+.resv-box-sub{font-size:12px;color:#aaa;margin-top:3px}
+.view-resv-btn{font-size:12px;font-weight:700;padding:7px 13px;border-radius:8px;border:var(--border);background:var(--black);color:#fff;cursor:pointer;white-space:nowrap}
+.view-resv-btn:hover{box-shadow:var(--shadow)}
+
+.fail-box{background:#fee5e5;border:2px solid #f9aaaa;border-radius:12px;padding:13px 16px;margin-bottom:18px}
+.fail-title{font-size:13px;font-weight:700;color:#c00;margin-bottom:4px}
+.fail-sub{font-size:12px;color:#e55;line-height:1.5}
+
+.faq-list{margin-bottom:18px}
+.faq-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f0ede8}
+.faq-icon{font-size:14px;flex-shrink:0}
+.faq-text{font-size:13px;color:var(--black);line-height:1.5}
+
+.notes-box{background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;padding:12px 15px;font-size:13px;color:var(--black);line-height:1.6;margin-bottom:18px}
+
+.waveform{display:flex;align-items:center;gap:3px;height:40px;padding:0 4px;margin-bottom:12px}
+.wf-bar{width:3px;border-radius:2px;background:var(--teal);flex-shrink:0}
+.audio-box{background:#f9f8f5;border:2px solid #e8e5de;border-radius:12px;padding:14px 18px;margin-bottom:18px}
+.audio-btns{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.audio-btn{font-size:12px;font-weight:700;padding:7px 13px;border-radius:8px;cursor:pointer}
+.play-btn{border:var(--border);background:var(--black);color:#fff}
+.dl-btn{border:2px solid #e0ddd5;background:#fff;color:var(--black)}
+.audio-dur{font-size:12px;color:#aaa;font-family:'Space Grotesk',monospace}
+
+.transcript{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg.agent{flex-direction:row}
+.msg.caller{flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid var(--black)}
+.msg.agent .msg-av{background:var(--teal);color:var(--black)}
+.msg.caller .msg-av{background:var(--black);color:var(--yellow)}
+.msg-bubble{max-width:80%;padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.5;border:2px solid}
+.msg.agent .msg-bubble{background:#f9f8f5;border-color:#e8e5de;color:var(--black);border-bottom-left-radius:3px}
+.msg.caller .msg-bubble{background:var(--black);border-color:var(--black);color:#fff;border-bottom-right-radius:3px}
+.msg-who{font-size:10px;font-weight:700;color:#bbb;letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.tx-empty{font-size:13px;color:#aaa;padding:8px 0;line-height:1.6}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:26px;right:26px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:12px;background:var(--black);color:#fff;border:var(--border);border-radius:12px;box-shadow:var(--shadow-lg);padding:13px 17px;font-size:13px;font-weight:600;min-width:260px;pointer-events:all;animation:tin .22s cubic-bezier(.4,0,.2,1)}
+@keyframes tin{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M6.5 4C5.1 4 4 5.1 4 6.5v3C4 10.9 5.1 12 6.5 12H8v2.5a1 1 0 001.7.7l3.3-3.2H17.5c1.4 0 2.5-1.1 2.5-2.5v-3C20 5.1 18.9 4 17.5 4h-11z" fill="black"/>
+        </svg>
+      </div>
+      <span class="logo-word">Tringg</span>
+    </div>
+        <div class="nav-sec">Main</div>
+    <div class="nav-item" id="nav-overview" style="cursor:pointer" onclick="window.location='tringg_s1_s2.html'">⬡ Overview
+    </div>
+    <div class="nav-item" id="nav-reservations" style="cursor:pointer" onclick="window.location='tringg_s3_reservations.html'">📋 Reservations
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item active" id="nav-calls" style="cursor:pointer" onclick="window.location='tringg_s4_calls.html'">📞 Calls
+    </div>
+    <div class="nav-item" id="nav-agents" style="cursor:pointer" onclick="window.location='tringg_s5_agents.html'">🤖 Agents
+    </div>
+    <div class="nav-sec">Config</div>
+    <div class="nav-item" id="nav-settings">⚙ Settings</div>
+    <div class="nav-item" id="nav-messaging">💬 Messaging</div>
+    <div class="nav-item" id="nav-analytics">📊 Analytics</div>
+    <div class="nav-outlet">
+      <div class="outlet-lbl">Outlet</div>
+      <select class="outlet-sel">
+        <option>Rossa · Main Street</option>
+        <option>Rossa · Midtown</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- topbar -->
+    <div class="topbar">
+      <div class="topbar-title">Calls</div>
+      <div class="topbar-right">
+        <div class="notif-btn">🔔<div class="n-dot"></div></div>
+        <div class="avatar">A</div>
+      </div>
+    </div>
+
+    <!-- stats -->
+    <div class="stats-strip">
+      <div class="stat-pill">
+        <div class="sp-icon sp-teal">📞</div>
+        <div><div class="sp-val">28</div><div class="sp-lbl">Calls today</div></div>
+      </div>
+      <div class="stat-pill">
+        <div class="sp-icon sp-yellow">📋</div>
+        <div><div class="sp-val" id="stat-created">0</div><div class="sp-lbl">Reservations created</div></div>
+      </div>
+      <div class="stat-pill">
+        <div class="sp-icon sp-salmon">⏱</div>
+        <div><div class="sp-val">2:14</div><div class="sp-lbl">Avg duration</div></div>
+      </div>
+      <div class="stat-pill">
+        <div class="sp-icon sp-white">🎯</div>
+        <div><div class="sp-val">68%</div><div class="sp-lbl">Capture rate</div></div>
+      </div>
+    </div>
+
+    <!-- controls -->
+    <div class="controls">
+      <div class="tabs" id="tab-bar">
+        <div class="tab active" data-tab="all">All <span class="tab-count" id="tc-all">0</span></div>
+        <div class="tab" data-tab="created">Reservation Created <span class="tab-count" id="tc-created">0</span></div>
+        <div class="tab" data-tab="faq">FAQ Only <span class="tab-count" id="tc-faq">0</span></div>
+        <div class="tab" data-tab="transfer">Transferred <span class="tab-count" id="tc-transfer">0</span></div>
+        <div class="tab" data-tab="missed">Missed <span class="tab-count" id="tc-missed">0</span></div>
+      </div>
+      <div class="controls-right">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search caller or label…">
+        </div>
+        <select class="date-sel" id="date-sel">
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="7d">Last 7 days</option>
+          <option value="30d">Last 30 days</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- content -->
+    <div class="content-area">
+      <div class="call-list-wrap">
+      <div class="call-list" id="call-list"></div>
+      <div class="scroll-btns" id="scroll-btns">
+        <button class="scroll-btn" id="btn-up" title="Scroll up">&#8679;</button>
+        <button class="scroll-btn" id="btn-down" title="Scroll down">&#8681;</button>
+      </div>
+      <div class="scroll-indicator" id="scroll-indicator"></div>
+    </div>
+      <div class="slideover" id="slideover">
+        <div class="so-header">
+          <div style="flex:1;min-width:0">
+            <div class="so-title" id="so-title">—</div>
+            <div class="so-meta" id="so-meta"></div>
+          </div>
+          <button class="so-close" id="so-close">✕</button>
+        </div>
+        <div class="so-body" id="so-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ─── DATA (all strings use JSON-safe double quotes, stored as JS object literal) ───
+var CALLS = [
+  {id:1,  out:"created",  label:"Birthday dinner for 4, Sat 8pm, window table",      caller:"(212) 555-0134", time:"7:36 PM", dur:"2:41", rid:1,  rname:"Priya Mehta",   tools:["create_reservation","answer_faq"], notes:"Caller mentioned it was a surprise birthday.", faq:null},
+  {id:2,  out:"faq",      label:"Asked about parking and dress code",                 caller:"Hidden number",  time:"7:21 PM", dur:"0:58", rid:null,rname:null,           tools:["answer_faq"], notes:null, faq:["What is the dress code?","Is parking available nearby?"]},
+  {id:3,  out:"created",  label:"Anniversary dinner for 2, gluten-free, 8:30pm",     caller:"(646) 555-0291", time:"7:14 PM", dur:"3:12", rid:2,  rname:"James Okafor",  tools:["create_reservation"], notes:null, faq:null},
+  {id:4,  out:"transfer", label:"Asked to speak to manager re previous visit",        caller:"(917) 555-0088", time:"6:55 PM", dur:"1:04", rid:null,rname:null,           tools:["transfer_call"], notes:"Escalated after 2 failed FAQ attempts.", faq:null},
+  {id:5,  out:"missed",   label:"Call abandoned before capture",                      caller:"(212) 555-0772", time:"6:44 PM", dur:"0:12", rid:null,rname:null,           tools:[], notes:null, faq:null},
+  {id:6,  out:"created",  label:"Business dinner for 6, private area, 9pm",           caller:"(917) 555-0320", time:"6:38 PM", dur:"2:58", rid:3,  rname:"Samantha Lee",  tools:["create_reservation","answer_faq"], notes:null, faq:null},
+  {id:7,  out:"created",  label:"Dinner for 3, no special requests",                  caller:"(212) 555-0559", time:"6:22 PM", dur:"1:49", rid:4,  rname:"Carlos Reyes",  tools:["create_reservation"], notes:"Returning caller recognised by voice.", faq:null},
+  {id:8,  out:"faq",      label:"Asked about halal options and kids menu",             caller:"(347) 555-0190", time:"6:11 PM", dur:"1:22", rid:null,rname:null,           tools:["answer_faq"], notes:null, faq:["Do you have halal options?","Is there a kids menu?"]},
+  {id:9,  out:"created",  label:"Table for 2, early evening, first visit",             caller:"(347) 555-0156", time:"5:58 PM", dur:"2:05", rid:5,  rname:"Natalie Chen",  tools:["create_reservation"], notes:null, faq:null},
+  {id:10, out:"transfer", label:"Caller requested refund on previous booking",         caller:"(212) 555-0401", time:"5:44 PM", dur:"0:52", rid:null,rname:null,           tools:["transfer_call"], notes:null, faq:null},
+  {id:11, out:"created",  label:"Large group of 8, birthday cake note, 7pm",          caller:"(212) 555-0203", time:"5:30 PM", dur:"3:44", rid:10, rname:"David Park",     tools:["create_reservation","answer_faq"], notes:"Confirmed cake pickup from bakery at 6pm.", faq:null},
+  {id:12, out:"faq",      label:"Asked about private dining availability",             caller:"(646) 555-0812", time:"5:18 PM", dur:"1:10", rid:null,rname:null,           tools:["answer_faq"], notes:null, faq:["Do you have a private dining room?","Minimum spend for private hire?"]},
+  {id:13, out:"created",  label:"Anniversary, champagne requested, 2 guests, 8pm",    caller:"(646) 555-0128", time:"5:05 PM", dur:"2:22", rid:13, rname:"Sofia Rossi",    tools:["create_reservation"], notes:null, faq:null},
+  {id:14, out:"missed",   label:"Call abandoned, 2 re-prompts with no response",      caller:"(917) 555-0710", time:"4:52 PM", dur:"0:28", rid:null,rname:null,           tools:[], notes:null, faq:null},
+  {id:15, out:"created",  label:"Work team dinner for 6, no allergies, 7:30pm",       caller:"(917) 555-0490", time:"4:40 PM", dur:"1:58", rid:14, rname:"Kevin Nkrumah", tools:["create_reservation"], notes:null, faq:null},
+  {id:16, out:"transfer", label:"Caller angry about previous no-show charge dispute",  caller:"(212) 555-0677", time:"4:28 PM", dur:"1:32", rid:null,rname:null,           tools:["transfer_call"], notes:"3-strike rule triggered after 3 retries.", faq:null},
+  {id:17, out:"created",  label:"Dinner for 2, peanut allergy flagged, 8:30pm",       caller:"(212) 555-0741", time:"4:15 PM", dur:"2:36", rid:11, rname:"Mei Lin",        tools:["create_reservation"], notes:null, faq:null},
+  {id:18, out:"faq",      label:"Asked about accessibility and wheelchair access",    caller:"(646) 555-0228", time:"4:02 PM", dur:"0:55", rid:null,rname:null,           tools:["answer_faq"], notes:null, faq:["Is the restaurant wheelchair accessible?","Is there a lift to the dining floor?"]},
+  {id:19, out:"created",  label:"Late dinner for 4, outdoor preference, 9:30pm",      caller:"(212) 555-0356", time:"3:48 PM", dur:"2:14", rid:12, rname:"Omar Hassan",    tools:["create_reservation","answer_faq"], notes:null, faq:null},
+  {id:20, out:"missed",   label:"Incomplete call dropped mid-booking",                 caller:"(917) 555-0901", time:"3:35 PM", dur:"0:47", rid:null,rname:null,           tools:[], notes:"Partial capture: name only. No reservation created.", faq:null},
+  {id:21, out:"created",  label:"Dinner for 2, vegetarian options query, 8pm",        caller:"(646) 555-0934", time:"3:22 PM", dur:"1:44", rid:16, rname:"Arjun Kapoor",   tools:["create_reservation","answer_faq"], notes:null, faq:["Do you have vegetarian options?"]},
+  {id:22, out:"faq",      label:"Asked about gift vouchers and loyalty programme",    caller:"(212) 555-0155", time:"3:08 PM", dur:"1:02", rid:null,rname:null,           tools:["answer_faq"], notes:null, faq:["Do you sell gift vouchers?"]},
+  {id:23, out:"transfer", label:"Caller requested Spanish-speaking staff member",     caller:"(646) 555-0388", time:"2:55 PM", dur:"0:44", rid:null,rname:null,           tools:["transfer_call"], notes:null, faq:null},
+  {id:24, out:"created",  label:"5 guests, halal options confirmed, 8pm",             caller:"(646) 555-0273", time:"2:40 PM", dur:"2:02", rid:19, rname:"Zara Ahmed",     tools:["create_reservation","answer_faq"], notes:null, faq:["Do you serve halal meat?"]},
+  {id:25, out:"created",  label:"3 guests, sake pairing interest, 8:30pm",            caller:"(917) 555-0620", time:"2:26 PM", dur:"2:18", rid:21, rname:"Yuki Tanaka",    tools:["create_reservation","answer_faq"], notes:null, faq:["Do you have a sake selection?"]},
+  {id:26, out:"created",  label:"Dinner for 2, quiet table, 8pm",                     caller:"(917) 555-0322", time:"2:12 PM", dur:"1:52", rid:7,  rname:"Aisha Patel",    tools:["create_reservation"], notes:null, faq:null},
+  {id:27, out:"created",  label:"Early dinner for 2, 7pm",                            caller:"(917) 555-0155", time:"1:58 PM", dur:"1:38", rid:18, rname:"Marcus Brown",   tools:["create_reservation"], notes:null, faq:null},
+  {id:28, out:"created",  label:"3 guests, no special requests, 9pm",                 caller:"(646) 555-0877", time:"1:44 PM", dur:"1:44", rid:9,  rname:"Lucy Thompson",  tools:["create_reservation"], notes:null, faq:null}
+];
+
+var TX = {
+  1:[
+    {r:"agent",  t:"Hi, you've reached Rossa Main Street. I can take reservations and answer questions. How can I help?"},
+    {r:"caller", t:"I'd like to book a table for Saturday please."},
+    {r:"agent",  t:"Of course! What name should I put the reservation under?"},
+    {r:"caller", t:"Priya Mehta."},
+    {r:"agent",  t:"And how many guests?"},
+    {r:"caller", t:"Four of us. It's a birthday dinner — is a window table possible?"},
+    {r:"agent",  t:"Lovely! I'll note the birthday and window table. What time were you thinking?"},
+    {r:"caller", t:"Around 8 PM."},
+    {r:"agent",  t:"Perfect. Priya Mehta, 4 guests, Saturday 8th at 8 PM, window table, birthday. Does that look right?"},
+    {r:"caller", t:"Yes, perfect — thank you!"},
+    {r:"agent",  t:"Wonderful! You'll receive a text confirmation shortly."}
+  ],
+  2:[
+    {r:"agent",  t:"Hi, Rossa Main Street — how can I help?"},
+    {r:"caller", t:"What is your dress code? And is there parking nearby?"},
+    {r:"agent",  t:"Our dress code is smart casual. For parking, there is a public garage on W 72nd Street about two minutes away. Anything else?"},
+    {r:"caller", t:"No that is great, thanks!"},
+    {r:"agent",  t:"My pleasure! Feel free to call back if you would like to make a reservation."}
+  ],
+  4:[
+    {r:"agent",  t:"Hi, Rossa Main Street — how can I help?"},
+    {r:"caller", t:"I want to speak to a manager. I had a problem last time."},
+    {r:"agent",  t:"I am sorry to hear that. Let me connect you with our team now."},
+    {r:"agent",  t:"Connecting you now. Please hold for just a moment."}
+  ],
+  5:[
+    {r:"agent",  t:"Hi, you have reached Rossa Main Street — how can I help?"},
+    {r:"agent",  t:"Are you still there? I am happy to help with a reservation."},
+    {r:"agent",  t:"I may have lost you — feel free to call back anytime!"}
+  ],
+  11:[
+    {r:"agent",  t:"Hi, Rossa Main Street! How can I help?"},
+    {r:"caller", t:"I need to book a table for 8 people this Friday. It is a birthday — can you arrange a cake?"},
+    {r:"agent",  t:"How lovely! You are welcome to bring a cake — I would recommend calling us to confirm timing. What time works?"},
+    {r:"caller", t:"Seven PM would be great."},
+    {r:"agent",  t:"And the name for the booking?"},
+    {r:"caller", t:"David Park."},
+    {r:"agent",  t:"Got it — David Park, 8 guests, Friday 7 Mar at 7 PM, birthday. Shall I confirm?"},
+    {r:"caller", t:"Yes. We are picking up a cake at 6 from the bakery next door, just flag that."},
+    {r:"agent",  t:"Noted! You will receive a text confirmation shortly."}
+  ]
+};
+
+var META = {
+  created:  {label:"Reservation Created", icon:"📋", oi:"oi-green",  badge:"badge-green",  stripe:"stripe-green"},
+  faq:      {label:"FAQ Only",            icon:"💬", oi:"oi-blue",   badge:"badge-blue",   stripe:"stripe-blue"},
+  transfer: {label:"Transferred",         icon:"↗",  oi:"oi-amber",  badge:"badge-amber",  stripe:"stripe-amber"},
+  missed:   {label:"Missed / No Outcome", icon:"📵", oi:"oi-red",    badge:"badge-red",    stripe:"stripe-red"},
+  incomplete:{label:"Incomplete",         icon:"⚠",  oi:"oi-grey",   badge:"badge-grey",   stripe:"stripe-grey"}
+};
+
+var TOOL_LABELS = {
+  create_reservation:"Create Reservation",
+  answer_faq:"Answer FAQ",
+  transfer_call:"Transfer Call",
+  check_availability:"Check Availability"
+};
+
+var currentTab = "all";
+var currentSearch = "";
+var selectedId = null;
+
+// ─── HELPERS ────────────────────────────────────────────────────
+function el(tag, cls, text) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+function meta(c) { return META[c.out] || META.missed; }
+
+// ─── FILTER ─────────────────────────────────────────────────────
+function getFiltered() {
+  var list = CALLS.slice();
+  if      (currentTab === "created")  list = list.filter(function(c){return c.out==="created";});
+  else if (currentTab === "faq")      list = list.filter(function(c){return c.out==="faq";});
+  else if (currentTab === "transfer") list = list.filter(function(c){return c.out==="transfer";});
+  else if (currentTab === "missed")   list = list.filter(function(c){return c.out==="missed"||c.out==="incomplete";});
+  if (currentSearch) {
+    var q = currentSearch.toLowerCase();
+    list = list.filter(function(c){
+      return c.label.toLowerCase().indexOf(q)!==-1 || c.caller.toLowerCase().indexOf(q)!==-1;
+    });
+  }
+  return list;
+}
+
+// ─── RENDER LIST (DOM only, zero innerHTML) ──────────────────────
+function renderList() {
+  var container = document.getElementById("call-list");
+  while (container.firstChild) container.removeChild(container.firstChild);
+
+  var rows = getFiltered();
+
+  if (!rows.length) {
+    var wrap = el("div","empty-state");
+    wrap.appendChild(el("div","empty-icon","📞"));
+    wrap.appendChild(el("div","empty-title","No calls here"));
+    wrap.appendChild(el("div","empty-sub","Try a different filter or date range"));
+    container.appendChild(wrap);
+    updateCounts();
+    return;
+  }
+
+  rows.forEach(function(c) {
+    var m = meta(c);
+    var card = el("div", "call-card" + (selectedId===c.id?" selected":""));
+    card.dataset.id = c.id;
+
+    var stripe = el("div","card-stripe");
+    stripe.classList.add(m.stripe);
+    card.appendChild(stripe);
+
+    var body = el("div","card-body");
+
+    var icon = el("div","outcome-icon");
+    icon.classList.add(m.oi);
+    icon.textContent = m.icon;
+    body.appendChild(icon);
+
+    var info = el("div","card-info");
+    info.appendChild(el("div","card-label",c.label));
+
+    var sub = el("div","card-sub");
+    sub.appendChild(el("span",null,c.caller));
+    sub.appendChild(el("span","dot","·"));
+    sub.appendChild(el("span",null,c.time));
+    sub.appendChild(el("span","dot","·"));
+    var b = el("span","badge"); b.classList.add(m.badge); b.textContent = m.label;
+    sub.appendChild(b);
+
+    if (c.rid) {
+      sub.appendChild(el("span","dot","·"));
+      var chip = el("span","resv-chip","📋 Reservation #"+c.rid+" — "+c.rname);
+      chip.dataset.resvId = c.rid;
+      sub.appendChild(chip);
+    }
+    info.appendChild(sub);
+    body.appendChild(info);
+
+    var right = el("div","card-right");
+    right.appendChild(el("div","card-time",c.time));
+    right.appendChild(el("div","card-dur",c.dur));
+    body.appendChild(right);
+
+    card.appendChild(body);
+    container.appendChild(card);
+  });
+
+  updateCounts();
+}
+
+function updateCounts() {
+  document.getElementById("tc-all").textContent      = CALLS.length;
+  document.getElementById("tc-created").textContent  = CALLS.filter(function(c){return c.out==="created";}).length;
+  document.getElementById("tc-faq").textContent      = CALLS.filter(function(c){return c.out==="faq";}).length;
+  document.getElementById("tc-transfer").textContent = CALLS.filter(function(c){return c.out==="transfer";}).length;
+  document.getElementById("tc-missed").textContent   = CALLS.filter(function(c){return c.out==="missed"||c.out==="incomplete";}).length;
+  var created = CALLS.filter(function(c){return c.out==="created";}).length;
+  document.getElementById("stat-created").textContent = created;
+}
+
+// ─── CLICK DELEGATION (list) ────────────────────────────────────
+document.getElementById("call-list").addEventListener("click", function(e) {
+  var chip = e.target.closest("[data-resv-id]");
+  if (chip) {
+    e.stopPropagation();
+    showToast("Opening reservation #" + chip.dataset.resvId);
+    return;
+  }
+  var card = e.target.closest(".call-card");
+  if (card) openPanel(parseInt(card.dataset.id, 10));
+});
+
+// ─── OPEN PANEL (DOM only, zero innerHTML) ───────────────────────
+function openPanel(id) {
+  selectedId = id;
+  var c = null;
+  for (var i=0; i<CALLS.length; i++) { if (CALLS[i].id===id) { c=CALLS[i]; break; } }
+  if (!c) return;
+
+  document.querySelectorAll(".call-card").forEach(function(el) {
+    el.classList.toggle("selected", parseInt(el.dataset.id,10)===id);
+  });
+
+  var m = meta(c);
+  document.getElementById("so-title").textContent = c.label;
+
+  var soMeta = document.getElementById("so-meta");
+  while (soMeta.firstChild) soMeta.removeChild(soMeta.firstChild);
+  var mb = el("span","badge"); mb.classList.add(m.badge); mb.textContent = m.label;
+  soMeta.appendChild(mb);
+  soMeta.appendChild(el("span","dot","·"));
+  soMeta.appendChild(el("span",null,c.caller));
+  soMeta.appendChild(el("span","dot","·"));
+  soMeta.appendChild(el("span",null,c.time+" · "+c.dur));
+
+  document.getElementById("slideover").classList.add("open");
+  buildPanel(c);
+}
+
+function buildPanel(c) {
+  var m  = meta(c);
+  var tx = TX[c.id] || null;
+  var body = document.getElementById("so-body");
+  while (body.firstChild) body.removeChild(body.firstChild);
+
+  // ── Hero grid ──
+  var grid = el("div","hero-grid");
+  function heroCell(cls, label, val, sub) {
+    var cell = el("div","hero-cell"); if(cls) cell.classList.add(cls);
+    cell.appendChild(el("div","hc-label",label));
+    cell.appendChild(el("div","hc-val",val));
+    cell.appendChild(el("div","hc-sub",sub));
+    return cell;
+  }
+  grid.appendChild(heroCell("teal",   "Duration", c.dur,   "minutes : seconds"));
+  grid.appendChild(heroCell("yellow", "Outcome",  m.label, c.time));
+  grid.appendChild(heroCell(null,     "Caller",   c.caller,"Inbound · Tringg AI"));
+  grid.appendChild(heroCell(null,     "Agent",    "Nova",  "Casual Dining template"));
+  body.appendChild(grid);
+
+  // ── Tools ──
+  function secHdr(text) { var h=el("div","sec-hdr",text); return h; }
+  body.appendChild(secHdr("Tools Invoked"));
+  var toolsRow = el("div","tools-row");
+  ["create_reservation","answer_faq","transfer_call","check_availability"].forEach(function(t) {
+    var used = c.tools.indexOf(t) !== -1;
+    var chip = el("div","tool-chip"+(used?" used":""));
+    var dot = el("div","tc-dot"); chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(TOOL_LABELS[t]));
+    toolsRow.appendChild(chip);
+  });
+  body.appendChild(toolsRow);
+
+  // ── Fail box ──
+  if (c.out==="missed"||c.out==="incomplete") {
+    var fb = el("div","fail-box");
+    fb.appendChild(el("div","fail-title", c.out==="missed"?"Call Abandoned":"Incomplete Call"));
+    fb.appendChild(el("div","fail-sub",   c.out==="missed"
+      ?"Caller hung up before any booking details were captured. No reservation was created."
+      :"Call dropped mid-conversation. No partial reservation was submitted."));
+    body.appendChild(fb);
+  }
+
+  // ── Reservation link ──
+  if (c.rid) {
+    var rb = el("div","resv-box");
+    var rl = el("div");
+    rl.appendChild(el("div","resv-box-title","Reservation #"+c.rid+" — "+c.rname));
+    rl.appendChild(el("div","resv-box-sub","Created during this call"));
+    rb.appendChild(rl);
+    var vb = el("button","view-resv-btn","View Reservation →");
+    vb.dataset.resvId = c.rid;
+    rb.appendChild(vb);
+    body.appendChild(rb);
+  }
+
+  // ── FAQ ──
+  if (c.faq && c.faq.length) {
+    body.appendChild(secHdr("Questions Answered"));
+    var fl = el("div","faq-list");
+    c.faq.forEach(function(q) {
+      var item = el("div","faq-item");
+      item.appendChild(el("span","faq-icon","💬"));
+      item.appendChild(el("span","faq-text",q));
+      fl.appendChild(item);
+    });
+    body.appendChild(fl);
+  }
+
+  // ── Notes ──
+  if (c.notes) {
+    body.appendChild(secHdr("Agent Notes"));
+    body.appendChild(el("div","notes-box",c.notes));
+  }
+
+  // ── Audio ──
+  if (c.out !== "missed") {
+    body.appendChild(secHdr("Call Audio"));
+    var ab = el("div","audio-box");
+    var wf = el("div","waveform");
+    for (var i=0;i<60;i++) {
+      var bar = el("div","wf-bar");
+      var h = Math.max(4, Math.min(36, Math.abs(Math.sin(i*0.4+c.id)*18+Math.cos(i*0.7+c.id*2)*12+16)));
+      bar.style.height = h.toFixed(0)+"px";
+      wf.appendChild(bar);
+    }
+    ab.appendChild(wf);
+    var btns = el("div","audio-btns");
+    var btnLeft = el("div",null); btnLeft.style.display="flex"; btnLeft.style.gap="10px";
+    var pb = el("button","audio-btn play-btn","▶ Play");
+    var db = el("button","audio-btn dl-btn","⬇ Download");
+    pb.addEventListener("click", function(){showToast("Playing call recording…");});
+    db.addEventListener("click", function(){showToast("Download started");});
+    btnLeft.appendChild(pb); btnLeft.appendChild(db);
+    btns.appendChild(btnLeft);
+    btns.appendChild(el("span","audio-dur",c.dur));
+    ab.appendChild(btns);
+    body.appendChild(ab);
+  }
+
+  // ── Transcript ──
+  body.appendChild(secHdr("Call Transcript"));
+  var txWrap = el("div","transcript");
+  if (tx) {
+    tx.forEach(function(msg) {
+      var row = el("div","msg"); row.classList.add(msg.r);
+      var av = el("div","msg-av", msg.r==="agent"?"AI":"G");
+      var inner = el("div");
+      var bubble = el("div","msg-bubble", msg.t);
+      var who = el("div","msg-who", msg.r==="agent"?"Nova · AI Agent":"Caller");
+      inner.appendChild(bubble); inner.appendChild(who);
+      row.appendChild(av); row.appendChild(inner);
+      txWrap.appendChild(row);
+    });
+  } else {
+    txWrap.appendChild(el("div","tx-empty",
+      (c.out==="missed"||c.out==="incomplete")
+        ? "No transcript — call ended before meaningful conversation."
+        : "Full transcript available. No preview for this call in demo."
+    ));
+  }
+  body.appendChild(txWrap);
+}
+
+// ─── CLOSE PANEL ────────────────────────────────────────────────
+document.getElementById("so-close").addEventListener("click", closePanel);
+document.getElementById("slideover").addEventListener("click", function(e) {
+  if (e.target.classList.contains("view-resv-btn")) {
+    showToast("Opening reservation #" + e.target.dataset.resvId + "…");
+  }
+});
+
+function closePanel() {
+  selectedId = null;
+  document.getElementById("slideover").classList.remove("open");
+  document.querySelectorAll(".call-card").forEach(function(c){c.classList.remove("selected");});
+}
+
+// ─── TABS ───────────────────────────────────────────────────────
+document.getElementById("tab-bar").addEventListener("click", function(e) {
+  var tab = e.target.closest(".tab");
+  if (!tab) return;
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+  tab.classList.add("active");
+  currentTab = tab.dataset.tab;
+  closePanel();
+  renderList();
+});
+
+// ─── SEARCH ─────────────────────────────────────────────────────
+document.getElementById("search-input").addEventListener("input", function() {
+  currentSearch = this.value;
+  renderList();
+});
+
+// ─── DATE ───────────────────────────────────────────────────────
+document.getElementById("date-sel").addEventListener("change", function() {
+  var labels = {today:"Today",yesterday:"Yesterday","7d":"Last 7 days","30d":"Last 30 days"};
+  showToast("Showing: " + (labels[this.value]||this.value));
+});
+
+// ─── NAV ────────────────────────────────────────────────────────
+document.querySelectorAll(".nav-item").forEach(function(item) {
+  item.addEventListener("click", function() {
+    document.querySelectorAll(".nav-item").forEach(function(n){n.classList.remove("active");});
+    item.classList.add("active");
+  });
+});
+
+// ─── TOAST ──────────────────────────────────────────────────────
+function showToast(msg) {
+  var wrap = document.getElementById("toast-wrap");
+  var t = el("div","toast");
+  t.appendChild(el("span",null,"✓"));
+  t.appendChild(el("span",null," "+msg));
+  wrap.appendChild(t);
+  setTimeout(function(){
+    t.style.opacity="0"; t.style.transform="translateX(20px)"; t.style.transition="all .3s";
+    setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t);},300);
+  }, 3000);
+}
+
+// ─── INIT ───────────────────────────────────────────────────────
+renderList();
+
+// ─── SCROLL BUTTONS ──────────────────────────────────────────────
+var SCROLL_THRESHOLD = 6; // show buttons when more than this many cards
+var SCROLL_STEP = 280;    // px per click
+
+var listEl      = document.getElementById("call-list");
+var scrollBtns  = document.getElementById("scroll-btns");
+var btnUp       = document.getElementById("btn-up");
+var btnDown     = document.getElementById("btn-down");
+var scrollInd   = document.getElementById("scroll-indicator");
+
+function updateScrollUI() {
+  var totalCards = listEl.querySelectorAll(".call-card").length;
+  var scrollable = listEl.scrollHeight > listEl.clientHeight + 4;
+
+  if (totalCards > SCROLL_THRESHOLD && scrollable) {
+    scrollBtns.classList.add("visible");
+    scrollInd.classList.add("visible");
+  } else {
+    scrollBtns.classList.remove("visible");
+    scrollInd.classList.remove("visible");
+  }
+
+  var atTop    = listEl.scrollTop <= 4;
+  var atBottom = listEl.scrollTop + listEl.clientHeight >= listEl.scrollHeight - 4;
+  btnUp.disabled   = atTop;
+  btnDown.disabled = atBottom;
+
+  var current = Math.ceil(listEl.scrollTop / 70) + 1;
+  var total   = totalCards;
+  scrollInd.textContent = current + " of " + total + " calls";
+}
+
+btnUp.addEventListener("click", function() {
+  listEl.scrollBy({top: -SCROLL_STEP, behavior: "smooth"});
+});
+
+btnDown.addEventListener("click", function() {
+  listEl.scrollBy({top: SCROLL_STEP, behavior: "smooth"});
+});
+
+listEl.addEventListener("scroll", updateScrollUI);
+
+// re-check whenever list is re-rendered
+var _origRenderList = renderList;
+renderList = function() {
+  _origRenderList();
+  setTimeout(updateScrollUI, 50);
+};
+
+// initial check
+setTimeout(updateScrollUI, 100);
+</script>
+</body>
+</html>
