@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tringg Pricing Model</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f4f0;
+    --color-background-tertiary: #eeedea;
+    --color-background-info: #e6f1fb;
+    --color-background-success: #eaf3de;
+    --color-background-warning: #faeeda;
+    --color-background-danger: #fcebeb;
+    --color-text-primary: #1a1a18;
+    --color-text-secondary: #5f5e5a;
+    --color-text-tertiary: #888780;
+    --color-text-info: #185fa5;
+    --color-text-success: #3b6d11;
+    --color-text-warning: #854f0b;
+    --color-text-danger: #a32d2d;
+    --color-border-tertiary: rgba(0,0,0,0.12);
+    --color-border-secondary: rgba(0,0,0,0.2);
+    --color-border-warning: rgba(186,117,23,0.35);
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    background: #f5f4f0;
+    color: #1a1a18;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background-primary: #1e1e1c;
+      --color-background-secondary: #2a2a27;
+      --color-background-tertiary: #242422;
+      --color-background-info: #0c3a63;
+      --color-background-success: #1a3a08;
+      --color-background-warning: #4a2c05;
+      --color-background-danger: #3d1010;
+      --color-text-primary: #e8e6de;
+      --color-text-secondary: #9c9a92;
+      --color-text-tertiary: #6e6c65;
+      --color-text-info: #85b7eb;
+      --color-text-success: #97c459;
+      --color-text-warning: #ef9f27;
+      --color-text-danger: #f09595;
+      --color-border-tertiary: rgba(255,255,255,0.1);
+      --color-border-secondary: rgba(255,255,255,0.18);
+      --color-border-warning: rgba(239,159,39,0.3);
+      background: #1a1a18;
+      color: #e8e6de;
+    }
+  }
+  body { padding: 2rem; max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .tab-row { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab-btn { padding: 6px 14px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); background: transparent; border-radius: var(--border-radius-md); cursor: pointer; color: var(--color-text-secondary); }
+  .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .75rem 1rem; }
+  .metric .label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .metric .val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+  .metric .sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .metric-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); margin-bottom: 1rem; }
+  .section { margin-bottom: 1.5rem; }
+  .section-title { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { font-weight: 500; font-size: 12px; color: var(--color-text-secondary); text-align: left; padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  td { padding: 7px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); }
+  tr:last-child td { border-bottom: none; }
+  .green { color: var(--color-text-success); font-weight: 500; }
+  .red { color: var(--color-text-danger); font-weight: 500; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+  .badge-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .warning-box { background: var(--color-background-warning); border: 0.5px solid var(--color-border-warning); border-radius: var(--border-radius-md); padding: .75rem 1rem; font-size: 13px; color: var(--color-text-warning); margin-bottom: 1rem; }
+  .note { font-size: 12px; color: var(--color-text-tertiary); padding-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Tringg — Pricing Model</h1>
+<p class="subtitle">Cost stack, competitor benchmarks, recommended pricing, staff threat analysis & bundling strategy · March 2026</p>
+
+<div class="tab-row">
+  <button class="tab-btn active" onclick="showTab('cost', this)">Cost model</button>
+  <button class="tab-btn" onclick="showTab('competitors', this)">Competitor pricing</button>
+  <button class="tab-btn" onclick="showTab('pricing', this)">Tringg pricing</button>
+  <button class="tab-btn" onclick="showTab('staff', this)">Staff cost threat</button>
+  <button class="tab-btn" onclick="showTab('bundles', this)">Bundling strategy</button>
+</div>
+
+<!-- TAB 1: COST MODEL -->
+<div id="tab-cost" class="tab-panel active">
+
+  <div class="section">
+    <div class="section-title">Volume assumptions — typical full-service restaurant</div>
+    <div class="metric-grid">
+      <div class="metric"><div class="label">Calls/day</div><div class="val">25–40</div><div class="sub">Reservation-focused</div></div>
+      <div class="metric"><div class="label">Avg call duration</div><div class="val">2.5 min</div><div class="sub">Tringg reservation call</div></div>
+      <div class="metric"><div class="label">Minutes/month</div><div class="val">~1,800</div><div class="sub">30 calls × 2.5 × 30 days</div></div>
+      <div class="metric"><div class="label">Reservations/month</div><div class="val">~450</div><div class="sub">~50% of calls convert</div></div>
+    </div>
+    <p class="note">Note: Busy fine-dining outlet can reach 60–80 calls/day. Tringg targets reservation-only flow, so 25–40/day is the realistic starting band for pilot restaurants.</p>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Infrastructure cost per outlet per month</div>
+    <table>
+      <tr><th>Component</th><th>Provider</th><th>Rate</th><th>Monthly cost (1,800 min)</th></tr>
+      <tr><td>VAPI platform</td><td>VAPI</td><td>$0.05/min</td><td>$90</td></tr>
+      <tr><td>Speech-to-text (STT)</td><td>Deepgram Nova 3</td><td>$0.01/min</td><td>$18</td></tr>
+      <tr><td>LLM (GPT-4o-mini)</td><td>OpenAI</td><td>$0.02/min</td><td>$36</td></tr>
+      <tr><td>Text-to-speech (TTS)</td><td>Deepgram/Azure</td><td>$0.01/min</td><td>$18</td></tr>
+      <tr><td>Telephony (Twilio voice)</td><td>Twilio</td><td>$0.0085/min inbound</td><td>$15</td></tr>
+      <tr><td>Twilio number rental</td><td>Twilio</td><td>$1.15/mo</td><td>$1</td></tr>
+      <tr><td>SMS to guest (2 SMS/reservation)</td><td>Twilio</td><td>$0.0083/SMS × 900 SMS</td><td>$7</td></tr>
+      <tr><td>SMS to owner (1 SMS/reservation)</td><td>Twilio</td><td>$0.0083/SMS × 450 SMS</td><td>$4</td></tr>
+      <tr style="background: var(--color-background-secondary);"><td><strong>Total infra cost</strong></td><td></td><td></td><td><strong>~$189/outlet/month</strong></td></tr>
+      <tr><td colspan="4" class="note">Using lean stack (not premium ElevenLabs voice). Premium stack adds ~$40–50/mo. High-volume scenario (80 calls/day) pushes to ~$420/outlet.</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Cost sensitivity by call volume</div>
+    <table>
+      <tr><th>Scenario</th><th>Calls/day</th><th>Min/month</th><th>Infra cost</th><th>At $299 price</th><th>At $199 price</th></tr>
+      <tr><td>Small/quiet</td><td>15</td><td>1,125</td><td>~$120</td><td class="green">+$179</td><td class="green">+$79</td></tr>
+      <tr><td>Mid-size (target)</td><td>30</td><td>2,250</td><td>~$210</td><td class="green">+$89</td><td class="red">-$11</td></tr>
+      <tr><td>Busy restaurant</td><td>60</td><td>4,500</td><td>~$390</td><td class="red">-$91</td><td class="red">-$191</td></tr>
+      <tr><td colspan="6" class="note">Heavy users destroy margins at flat pricing — the case for usage-based caps or fair-use limits.</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- TAB 2: COMPETITORS -->
+<div id="tab-competitors" class="tab-panel">
+
+  <div class="section card">
+    <div class="section-title">Direct competitor pricing (US market, 2025–2026)</div>
+    <table>
+      <tr><th>Product</th><th>Entry price</th><th>Mid tier</th><th>Top tier</th><th>Model</th><th>Setup fee</th></tr>
+      <tr><td><strong>Slang.ai</strong></td><td>~$199/mo</td><td>$399/mo</td><td>$599+/mo</td><td>Flat per location</td><td>~$500</td></tr>
+      <tr><td><strong>Loman.ai</strong></td><td>$299/mo</td><td>Custom</td><td>Enterprise</td><td>Flat per location</td><td>None visible</td></tr>
+      <tr><td><strong>Hostie AI</strong></td><td>$199/mo</td><td>$299/mo</td><td>Custom</td><td>Flat per location</td><td>None</td></tr>
+      <tr><td><strong>Kea AI</strong></td><td>Custom</td><td>Custom</td><td>Enterprise</td><td>Per call / custom</td><td>Varies</td></tr>
+      <tr><td><strong>PolyAI</strong></td><td>Enterprise only</td><td>—</td><td>—</td><td>Custom</td><td>High</td></tr>
+      <tr><td colspan="6" class="note">All SMB competitors use flat unlimited-call models — no per-minute billing exposed to restaurant owner.</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Feature comparison</div>
+    <table>
+      <tr><th>Feature</th><th>Slang (Core $399)</th><th>Hostie ($299)</th><th>Loman ($299)</th><th>Tringg Phase 1</th></tr>
+      <tr><td>24/7 call answering</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>Reservation capture</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>SMS confirmation</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>OpenTable integration</td><td>✓ (Core+)</td><td>✓</td><td>✓</td><td>Phase 3</td></tr>
+      <tr><td>Full merchant dashboard</td><td>Basic</td><td>Full</td><td>Basic</td><td><strong>Full (differentiated)</strong></td></tr>
+      <tr><td>Agent config (voice/model)</td><td>Limited</td><td>Limited</td><td>Limited</td><td><strong>Full (differentiated)</strong></td></tr>
+      <tr><td>Multi-outlet mgmt</td><td>Custom</td><td>Add-on</td><td>Custom</td><td>Phase 2 built-in</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- TAB 3: PRICING -->
+<div id="tab-pricing" class="tab-panel">
+
+  <div class="warning-box">Flat pricing at $199 is margin-negative at mid-volume. The math only works with a usage cap or tiered fair-use model.</div>
+
+  <div class="section card">
+    <div class="section-title">Recommended pricing — 1 to 5 outlet US restaurants</div>
+    <table>
+      <tr><th>Tier</th><th>Price</th><th>Included minutes</th><th>Overage</th><th>Best for</th></tr>
+      <tr><td><span class="badge badge-green">Starter</span></td><td>$149/outlet/mo</td><td>1,000 min/mo</td><td>$0.18/min extra</td><td>1 quiet location, cafés</td></tr>
+      <tr><td><span class="badge badge-blue">Growth</span></td><td>$249/outlet/mo</td><td>2,000 min/mo</td><td>$0.15/min extra</td><td>1–2 outlets, typical casual dining</td></tr>
+      <tr><td><span class="badge badge-amber">Pro</span></td><td>$349/outlet/mo</td><td>3,500 min/mo</td><td>$0.12/min extra</td><td>2–5 outlets, fine dining, high volume</td></tr>
+      <tr><td colspan="5" class="note">Multi-outlet discount: 10% off per additional outlet from outlet 2. Annual billing: 2 months free. Trial: 14 days free, no card required.</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Margin at Growth ($249) — typical 30 calls/day outlet</div>
+    <div class="metric-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="metric"><div class="label">Revenue</div><div class="val">$249</div></div>
+      <div class="metric"><div class="label">Infra cost</div><div class="val">$210</div></div>
+      <div class="metric"><div class="label">Gross margin</div><div class="val" style="color: var(--color-text-success);">$39 (16%)</div><div class="sub">Before team & hosting</div></div>
+    </div>
+    <p class="note" style="margin-top: 8px;">Thin early-stage. At 500+ outlets VAPI/Twilio volume pricing brings infra to ~$120–140/outlet, improving margin to 40–45%.</p>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Billing cycle recommendation</div>
+    <table>
+      <tr><td style="width: 140px;"><strong>Monthly</strong></td><td>Default. No commitment. Preferred by cost-conscious small restaurant owners.</td></tr>
+      <tr><td><strong>Annual (2 months free)</strong></td><td>Push at onboarding. Target 30–40% annual conversion for cash flow stability.</td></tr>
+      <tr><td><strong>14-day free trial</strong></td><td>Full product, no card required. Let owners feel the dashboard before paying.</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- TAB 4: STAFF THREAT -->
+<div id="tab-staff" class="tab-panel">
+
+  <div class="warning-box">This is the most important strategic objection to pre-empt in your sales motion.</div>
+
+  <div class="section card">
+    <div class="section-title">True cost of a human reservation handler (US, 2025)</div>
+    <table>
+      <tr><th>Scenario</th><th>Hours/week</th><th>Hourly rate</th><th>Monthly cost</th><th>Annual cost</th></tr>
+      <tr><td>Part-time phone/host</td><td>20 hrs</td><td>$15/hr</td><td>$1,300</td><td>$15,600</td></tr>
+      <tr><td>Shared host role (also seats)</td><td>30 hrs</td><td>$15/hr</td><td>$1,950</td><td>$23,400</td></tr>
+      <tr><td>Dedicated reservation desk</td><td>40 hrs</td><td>$15/hr</td><td>$2,600</td><td>$31,200</td></tr>
+      <tr><td colspan="5" class="note">Add ~20–25% for employer payroll taxes, workers' comp. A 20hr/week person truly costs $1,560–1,625/month all-in.</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">The "$300 staff" objection — broken down</div>
+    <table>
+      <tr><th>Question</th><th>Reality</th></tr>
+      <tr><td>Can 1 person handle 5 outlets?</td><td>Possible if calls spread. But holidays, sick days, peak Friday night — they can't be in 5 places. Tringg handles concurrent calls; 1 human cannot.</td></tr>
+      <tr><td>True cost at 20 hrs/week</td><td>$1,300–1,600/month with taxes. Not $300. A $300 hire is ~5 hrs/week — handles maybe 2–3 hrs of peak calls, nothing else.</td></tr>
+      <tr><td>What a human can't do</td><td>Answer at 11pm. Handle 3 simultaneous calls. Auto-transcribe. Send SMS. Provide analytics. Work during their own meal break.</td></tr>
+      <tr><td>What Tringg must prove</td><td>You don't replace a person. You replace missed calls at 10pm, simultaneous Saturday calls, voicemails that never get returned.</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Value frame — don't sell "staff replacement"</div>
+    <p style="font-size: 14px; margin-bottom: 10px;">"Tringg doesn't replace your host. It captures the reservations your host misses — during peak service, after closing, and during staff transitions."</p>
+    <p style="font-size: 13px; color: var(--color-text-secondary);">Industry data: 43% of restaurant calls go unanswered. At $50 average spend per cover, 5 missed reservation calls/day = $75,000 revenue/year. Tringg at $249/mo = $2,988/year. The ROI frame writes itself.</p>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Handling the objection in a sales conversation</div>
+    <table>
+      <tr><th>Objection</th><th>Response</th></tr>
+      <tr><td>"I'll hire someone for $15/hr"</td><td>They cost $1,500+/mo fully loaded. Tringg is $249. AND answers at 2am and handles 4 calls at once.</td></tr>
+      <tr><td>"I already have a host"</td><td>Tringg handles overflow. Your host focuses on in-person guests; Tringg handles the phone during service.</td></tr>
+      <tr><td>"It's not worth $200/mo"</td><td>One missed $200 party booking per month pays for Tringg. Your missed call rate is the ROI calculator.</td></tr>
+      <tr><td>"My manager does reservations"</td><td>During peak Friday service? On Sunday morning? Tringg fills the gaps your manager can't.</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- TAB 5: BUNDLING -->
+<div id="tab-bundles" class="tab-panel">
+
+  <div class="section card">
+    <div class="section-title">Bundling & gating strategy</div>
+    <table>
+      <tr><th>Bundle</th><th>What's gated</th><th>Price</th><th>Rationale</th></tr>
+      <tr><td><strong>Starter</strong></td><td>SMS limited to 500/mo, no analytics, 1 agent</td><td>$149</td><td>Low risk to try; pain felt when volume grows</td></tr>
+      <tr><td><strong>Growth</strong></td><td>Full SMS, basic analytics, 3 agents, 2 outlets</td><td>$249</td><td>Core product for single restaurant</td></tr>
+      <tr><td><strong>Pro</strong></td><td>All analytics, agent scheduling, 5 outlets, priority support, custom voice</td><td>$349</td><td>Multi-outlet operators; stickier due to config investment</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">High-value upsell add-ons (charged separately)</div>
+    <table>
+      <tr><th>Add-on</th><th>Price</th><th>Target buyer</th><th>Why it works</th></tr>
+      <tr><td>Premium voice (ElevenLabs)</td><td>+$29/mo/outlet</td><td>Fine dining, hospitality brands</td><td>Voice quality = brand identity for upscale restaurants</td></tr>
+      <tr><td>Call recording + transcripts</td><td>+$19/mo/outlet</td><td>Owners who want QA</td><td>Low cost to deliver, high perceived value</td></tr>
+      <tr><td>WhatsApp confirmations</td><td>+$15/mo/outlet</td><td>Multi-cultural, US Hispanic market</td><td>70%+ open rate vs SMS</td></tr>
+      <tr><td>Extra SMS bundle (500 extra)</td><td>+$9/mo</td><td>High-volume outlets</td><td>Pure margin; $4 cost to deliver</td></tr>
+      <tr><td>6th+ outlet</td><td>$199/mo/outlet</td><td>Restaurant groups</td><td>Discounted rate drives expansion, locks in group</td></tr>
+    </table>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Annual contract incentive</div>
+    <div class="metric-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="metric"><div class="label">Monthly billing</div><div class="val">$249/mo</div><div class="sub">No commitment</div></div>
+      <div class="metric"><div class="label">Annual billing</div><div class="val">$208/mo</div><div class="sub">2 months free (16% off)</div></div>
+      <div class="metric"><div class="label">Your benefit</div><div class="val">$2,988/yr</div><div class="sub">Cash upfront, lower churn</div></div>
+    </div>
+  </div>
+
+  <div class="section card">
+    <div class="section-title">Referral & group discount</div>
+    <p style="font-size: 13px; margin-bottom: 8px;">Refer another restaurant → get 1 month free. Group accounts (3+ restaurants, same owner) auto-qualify for Pro pricing on all outlets regardless of tier.</p>
+    <p style="font-size: 13px; color: var(--color-text-secondary);">Target restaurant associations and hospitality groups (NRA, local dining collectives). Your product is demo-able in 60 seconds — referrals convert fast.</p>
+  </div>
+
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
