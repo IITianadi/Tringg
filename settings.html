@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tringg — Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#fff;--bg:#f0ede8;
+  --teal:#7FE8D8;--yellow:#F5E642;--salmon:#F0A090;
+  --border:2px solid #0a0a0a;--shadow:4px 4px 0 #0a0a0a;--shadow-lg:6px 6px 0 #0a0a0a;
+  --nav-w:240px;
+}
+html,body{height:100%;background:var(--bg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* NAV */
+.nav{width:var(--nav-w);flex-shrink:0;background:var(--black);display:flex;flex-direction:column;padding:28px 0;overflow-y:auto}
+.nav-logo{padding:0 22px 26px;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:10px}
+.logo-box{width:36px;height:36px;background:var(--yellow);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-word{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.4px}
+.nav-sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;padding:18px 22px 8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 22px;cursor:pointer;color:#555;font-size:14px;font-weight:500;transition:all .18s;border-left:3px solid transparent}
+.nav-item:hover{color:#fff;background:#111}
+.nav-item.active{color:#fff;background:#141414;border-left-color:var(--yellow)}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px;background:#e55;color:#fff}
+.nav-outlet{margin-top:auto;padding:16px 22px 0;border-top:1px solid #1a1a1a}
+.outlet-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#3a3a3a;margin-bottom:8px}
+.outlet-sel{width:100%;background:#111;border:1px solid #2a2a2a;border-radius:9px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:9px 12px;appearance:none;outline:none}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.topbar-outlet{font-size:12px;color:#bbb;font-weight:500}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.notif-btn{position:relative;width:38px;height:38px;border-radius:9px;background:#f9f8f5;border:2px solid #e0ddd5;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.n-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#e55;border-radius:50%;border:2px solid #fff}
+.avatar{width:38px;height:38px;border-radius:9px;background:var(--black);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--yellow);cursor:pointer}
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;border:var(--border);cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--black);color:#fff;box-shadow:var(--shadow)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-ghost{background:#fff;color:var(--black)}
+.btn-ghost:hover{background:#f5f2ec}
+.btn-teal{background:var(--teal);color:var(--black);box-shadow:var(--shadow)}
+.btn-teal:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-danger{background:#fee5e5;color:#c00;border-color:#f9aaaa}
+.btn-danger:hover{background:#fdd;box-shadow:var(--shadow)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+
+/* CONTENT LAYOUT */
+.content-area{flex:1;display:flex;overflow:hidden}
+
+/* SETTINGS SIDEBAR */
+.settings-sidebar{width:220px;flex-shrink:0;background:#fff;border-right:2px solid #e5e2db;display:flex;flex-direction:column;padding:20px 0;overflow-y:auto}
+.ss-section{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#bbb;padding:14px 22px 8px}
+.ss-item{display:flex;align-items:center;gap:10px;padding:10px 22px;cursor:pointer;font-size:14px;font-weight:500;color:#666;border-left:3px solid transparent;transition:all .15s}
+.ss-item:hover{color:var(--black);background:#f9f8f5}
+.ss-item.active{color:var(--black);font-weight:700;background:#f9f8f5;border-left-color:var(--yellow)}
+.ss-icon{font-size:16px;flex-shrink:0}
+
+/* SETTINGS BODY */
+.settings-body{flex:1;overflow-y:auto;padding:28px 36px;display:flex;flex-direction:column;gap:0}
+
+/* SECTION CARD */
+.sec-card{background:#fff;border:var(--border);border-radius:18px;box-shadow:var(--shadow);padding:26px 30px;margin-bottom:22px}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--black);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.sec-subtitle{font-size:13px;color:#aaa;margin-bottom:22px;line-height:1.5}
+.sec-divider{height:2px;background:#f0ede8;margin:20px 0}
+
+/* FORM ELEMENTS */
+.cfg-grid{display:grid;gap:16px}
+.cfg-grid-2{grid-template-columns:1fr 1fr}
+.cfg-grid-3{grid-template-columns:1fr 1fr 1fr}
+.cfg-grid-1{grid-template-columns:1fr}
+.cfg-field{display:flex;flex-direction:column;gap:6px}
+.cfg-field.full{grid-column:1/-1}
+.cfg-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888}
+.cfg-label-sub{font-size:11px;color:#bbb;font-weight:400;margin-top:1px}
+.cfg-input,.cfg-select,.cfg-textarea{padding:10px 14px;background:#f9f8f5;border:2px solid #e0ddd5;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;color:var(--black);outline:none;transition:border-color .2s;appearance:none;width:100%}
+.cfg-input:focus,.cfg-select:focus,.cfg-textarea:focus{border-color:var(--black)}
+.cfg-textarea{resize:vertical;line-height:1.6}
+.cfg-input-group{display:flex;gap:0}
+.cfg-input-group .cfg-input{border-radius:10px 0 0 10px;border-right:none;flex:1}
+.cfg-input-group .cfg-input:focus{z-index:1;border-color:var(--black);border-right:2px solid var(--black)}
+.cfg-input-group-btn{padding:10px 14px;background:var(--black);color:#fff;border:var(--border);border-radius:0 10px 10px 0;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif}
+.cfg-input-group-btn:hover{background:#222}
+
+/* CARRIER DETECTION */
+.carrier-detected{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#e6f9ee;border:2px solid #a0dbb5;border-radius:9px;font-size:12px;font-weight:700;color:#1a6e3a;margin-top:6px}
+.carrier-icon{font-size:14px}
+
+/* PHONE NUMBER TABLE */
+.phone-table{width:100%;border-collapse:collapse}
+.phone-table th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;padding:0 12px 10px;text-align:left;white-space:nowrap}
+.phone-table td{padding:12px;border-top:2px solid #f0ede8;vertical-align:middle}
+.phone-table tr:first-child td{border-top:none}
+.phone-num{font-family:'Space Grotesk',monospace;font-size:13px;font-weight:700;color:var(--black)}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;border:2px solid #e0ddd5;background:#fff;cursor:pointer;color:#888;transition:all .14s}
+.copy-btn:hover{border-color:var(--black);color:var(--black)}
+.fw-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:7px;border:2px solid}
+.fw-verified{background:#e6f9ee;border-color:#a0dbb5;color:#1a6e3a}
+.fw-pending{background:#fff8e0;border-color:#f0c84a;color:#7a5a00}
+.fw-error{background:#fee5e5;border-color:#f9aaaa;color:#c00}
+.outlet-name-tag{font-size:13px;font-weight:700;color:var(--black)}
+.outlet-sub{font-size:11px;color:#aaa;margin-top:2px}
+
+/* FORWARDING INSTRUCTIONS BOX */
+.fw-box{background:#0a0a0a;border:var(--border);border-radius:14px;padding:20px 22px;margin-top:16px}
+.fw-box-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.fw-step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.fw-step-num{width:22px;height:22px;border-radius:50%;background:var(--yellow);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--black);flex-shrink:0;margin-top:1px}
+.fw-step-text{font-size:13px;color:#ccc;line-height:1.5}
+.fw-step-code{font-family:'Space Grotesk',monospace;font-size:13px;color:var(--teal);background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:2px 8px;display:inline-block;margin:4px 0}
+.fw-copy-row{display:flex;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #222}
+.fw-copy-btn{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;border:2px solid}
+.fw-copy-plain{background:var(--teal);border-color:var(--black);color:var(--black)}
+.fw-copy-plain:hover{box-shadow:var(--shadow)}
+.fw-copy-sms{background:#111;border-color:#333;color:#aaa}
+.fw-copy-sms:hover{border-color:var(--teal);color:var(--teal)}
+
+/* HOURS GRID */
+.hours-grid{display:flex;flex-direction:column;gap:6px}
+.hours-row{display:flex;align-items:center;gap:14px;padding:10px 14px;background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px}
+.hours-day{font-size:13px;font-weight:700;color:var(--black);width:44px;flex-shrink:0}
+.hours-toggle{flex-shrink:0}
+.hours-times{display:flex;align-items:center;gap:8px;flex:1}
+.hours-sep{font-size:12px;color:#bbb;font-weight:500}
+.time-input{padding:7px 10px;background:#fff;border:2px solid #e0ddd5;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;color:var(--black);outline:none;width:90px;transition:border-color .2s}
+.time-input:focus{border-color:var(--black)}
+.time-input:disabled{opacity:.35;cursor:not-allowed}
+.hours-row.closed{opacity:.5}
+
+/* TOGGLE */
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;border-radius:12px;border:2px solid #ddd;background:#ddd;transition:all .2s;cursor:pointer}
+.toggle input:checked + .tog-track{background:var(--teal);border-color:var(--black)}
+.tog-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;pointer-events:none}
+.toggle input:checked ~ .tog-thumb{transform:translateX(20px)}
+
+/* SPECIAL DATES */
+.special-date-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;margin-bottom:8px}
+.sd-date{font-size:13px;font-weight:700;color:var(--black);width:100px;flex-shrink:0}
+.sd-label{font-size:13px;color:#888;flex:1}
+.sd-closed{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#fee5e5;border:2px solid #f9aaaa;color:#c00}
+.sd-custom{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;background:#e6f9ee;border:2px solid #a0dbb5;color:#1a6e3a}
+.sd-del{width:26px;height:26px;border-radius:7px;border:2px solid #e0ddd5;background:#fff;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#bbb}
+.sd-del:hover{border-color:#f9aaaa;color:#c00;background:#fee5e5}
+
+/* CONFIRMATION MODE */
+.conf-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.conf-card{border:var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .15s;background:#f9f8f5}
+.conf-card:hover{border-color:var(--black);background:#fff}
+.conf-card.selected{background:var(--black);border-color:var(--black);box-shadow:var(--shadow)}
+.conf-card.selected .cc-title,.conf-card.selected .cc-desc{color:#fff}
+.conf-card.selected .cc-badge{background:var(--teal);color:var(--black)}
+.cc-title{font-size:14px;font-weight:800;color:var(--black);margin-bottom:4px}
+.cc-desc{font-size:12px;color:#888;line-height:1.4}
+.cc-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#f0ede8;border:1px solid #e0ddd5;color:#666;margin-top:8px;display:inline-block}
+
+/* TEAM TABLE */
+.team-table{width:100%;border-collapse:collapse}
+.team-table th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;padding:0 14px 10px;text-align:left}
+.team-table td{padding:13px 14px;border-top:2px solid #f0ede8;vertical-align:middle}
+.member-av{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;border:2px solid var(--black);flex-shrink:0}
+.member-name{font-size:14px;font-weight:700;color:var(--black)}
+.member-email{font-size:12px;color:#aaa;margin-top:2px}
+.role-badge{font-size:11px;font-weight:700;padding:4px 11px;border-radius:7px;border:2px solid;display:inline-block}
+.role-owner{background:#fffef0;border-color:#f0c84a;color:#7a5a00}
+.role-manager{background:#e8f0fe;border-color:#a8c4f8;color:#1a50a0}
+.role-staff{background:#f5f2ec;border-color:#ddd;color:#666}
+.member-status-active{font-size:11px;font-weight:700;color:#1a6e3a}
+.member-status-invited{font-size:11px;font-weight:700;color:#7a5a00}
+
+/* NOTIFICATION TABLE */
+.notif-table{width:100%;border-collapse:collapse}
+.notif-table th{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#bbb;padding:0 14px 12px;text-align:center}
+.notif-table th:first-child{text-align:left}
+.notif-table td{padding:13px 14px;border-top:2px solid #f0ede8;text-align:center;vertical-align:middle}
+.notif-table td:first-child{text-align:left}
+.notif-event{font-size:14px;font-weight:700;color:var(--black)}
+.notif-desc{font-size:12px;color:#aaa;margin-top:2px}
+
+/* MASTER SOUND SWITCH */
+.master-sound{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#f9f8f5;border:2px solid #e8e5de;border-radius:12px;margin-bottom:18px}
+.ms-info .ms-title{font-size:14px;font-weight:700;color:var(--black)}
+.ms-info .ms-sub{font-size:12px;color:#aaa;margin-top:3px}
+
+/* INVITE MODAL */
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,10,10,.55);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px)}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border:var(--border);border-radius:20px;box-shadow:var(--shadow-lg);width:500px;max-width:95vw;max-height:90vh;overflow-y:auto;animation:slideUp .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{padding:22px 28px 16px;border-bottom:2px solid #f0ede8;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.modal-close{width:30px;height:30px;border-radius:8px;border:2px solid #e0ddd5;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--black)}
+.modal-close:hover{border-color:var(--black)}
+.modal-body{padding:22px 28px}
+.modal-footer{padding:14px 28px 22px;display:flex;gap:10px;justify-content:flex-end;border-top:2px solid #f0ede8}
+.invite-link-box{background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;padding:12px 14px;font-family:'Space Grotesk',monospace;font-size:12px;color:#888;word-break:break-all;margin-top:10px}
+
+/* SPECIAL DATE MODAL */
+.modal-wide{width:560px}
+
+/* SAVE BAR */
+.save-bar{background:#fff;border-top:2px solid #e5e2db;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.save-bar-note{font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:26px;right:26px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;background:var(--black);color:#fff;border:var(--border);border-radius:12px;box-shadow:var(--shadow-lg);padding:12px 16px;font-size:13px;font-weight:600;min-width:240px;pointer-events:all;animation:tin .22s cubic-bezier(.4,0,.2,1)}
+@keyframes tin{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* DANGER ZONE */
+.danger-zone{border:2px solid #f9aaaa;border-radius:14px;padding:18px 22px;background:#fff}
+.dz-title{font-size:14px;font-weight:800;color:#c00;margin-bottom:4px}
+.dz-desc{font-size:12px;color:#e55;line-height:1.5;margin-bottom:14px}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M6.5 4C5.1 4 4 5.1 4 6.5v3C4 10.9 5.1 12 6.5 12H8v2.5a1 1 0 001.7.7l3.3-3.2H17.5c1.4 0 2.5-1.1 2.5-2.5v-3C20 5.1 18.9 4 17.5 4h-11z" fill="black"/>
+        </svg>
+      </div>
+      <span class="logo-word">Tringg</span>
+    </div>
+    <div class="nav-sec">Main</div>
+    <div class="nav-item" onclick="window.location='tringg_s1_s2.html'"><span>⬡</span> Overview</div>
+    <div class="nav-item" onclick="window.location='tringg_s3_reservations.html'"><span>📋</span> Reservations <span class="nav-badge">3</span></div>
+    <div class="nav-item" onclick="window.location='tringg_s4_calls.html'"><span>📞</span> Calls</div>
+    <div class="nav-item" onclick="window.location='tringg_s5_agents.html'"><span>🤖</span> Agents</div>
+    <div class="nav-sec">Config</div>
+    <div class="nav-item active"><span>⚙</span> Settings</div>
+    <div class="nav-item"><span>💬</span> Messaging</div>
+    <div class="nav-item"><span>📊</span> Analytics</div>
+    <div class="nav-outlet">
+      <div class="outlet-lbl">Outlet</div>
+      <select class="outlet-sel">
+        <option>Rossa · Main Street</option>
+        <option>Rossa · Midtown</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Settings</div>
+        <div class="topbar-outlet">Rossa · Main Street</div>
+      </div>
+      <div class="topbar-right">
+        <div class="notif-btn">🔔<div class="n-dot"></div></div>
+        <div class="avatar">A</div>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- SETTINGS SIDEBAR -->
+      <div class="settings-sidebar">
+        <div class="ss-section">Outlet</div>
+        <div class="ss-item active" data-section="phone"><span class="ss-icon">📞</span> Phone Numbers</div>
+        <div class="ss-item" data-section="brand"><span class="ss-icon">🏷</span> Brand Profile</div>
+        <div class="ss-item" data-section="tables"><span class="ss-icon">📅</span> Table Config</div>
+        <div class="ss-section">Account</div>
+        <div class="ss-item" data-section="team"><span class="ss-icon">👥</span> Team</div>
+        <div class="ss-item" data-section="notifications"><span class="ss-icon">🔔</span> Notifications</div>
+      </div>
+
+      <!-- SETTINGS BODY -->
+      <div class="settings-body" id="settings-body"></div>
+
+    </div>
+
+    <!-- SAVE BAR -->
+    <div class="save-bar">
+      <div class="save-bar-note"><span>💾</span><span>Changes are saved per section.</span></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="showToast('Changes discarded')">Discard</button>
+        <button class="btn btn-primary" onclick="showToast('Settings saved successfully ✓')">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INVITE MODAL -->
+<div class="modal-backdrop" id="modal-invite">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Invite Team Member</div>
+      <button class="modal-close" id="invite-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;gap:14px">
+        <div class="cfg-field">
+          <div class="cfg-label">Email Address</div>
+          <input type="email" class="cfg-input" id="invite-email" placeholder="name@restaurant.com">
+        </div>
+        <div class="cfg-field">
+          <div class="cfg-label">Role</div>
+          <select class="cfg-select" id="invite-role">
+            <option value="Manager">Manager — Reservations, Calls, Agents (no Billing)</option>
+            <option value="Staff">Staff — Read-only: today's reservations and calls</option>
+          </select>
+        </div>
+        <div class="cfg-field">
+          <div class="cfg-label">Or share invite link</div>
+          <div style="display:flex;gap:8px;margin-top:2px">
+            <div class="invite-link-box" style="flex:1">https://app.tringg.com/invite/rossa-main/a7f3k2</div>
+            <button class="btn btn-ghost btn-sm" onclick="showToast('Link copied to clipboard')">Copy</button>
+          </div>
+          <div style="font-size:11px;color:#bbb;margin-top:5px">Link expires in 7 days · Valid for selected role</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="invite-cancel">Cancel</button>
+      <button class="btn btn-primary" id="invite-send">Send Invite</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD SPECIAL DATE MODAL -->
+<div class="modal-backdrop" id="modal-special-date">
+  <div class="modal modal-wide">
+    <div class="modal-header">
+      <div class="modal-title">Add Special Date</div>
+      <button class="modal-close" id="sd-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="cfg-field">
+          <div class="cfg-label">Date</div>
+          <input type="date" class="cfg-input" id="sd-date">
+        </div>
+        <div class="cfg-field">
+          <div class="cfg-label">Label (optional)</div>
+          <input type="text" class="cfg-input" id="sd-label" placeholder="e.g. Christmas Day">
+        </div>
+        <div class="cfg-field full" style="grid-column:1/-1">
+          <div class="cfg-label">Hours</div>
+          <select class="cfg-select" id="sd-type">
+            <option value="closed">Closed all day</option>
+            <option value="custom">Custom hours</option>
+          </select>
+        </div>
+        <div class="cfg-field" id="sd-open-wrap">
+          <div class="cfg-label">Opens at</div>
+          <input type="time" class="cfg-input" id="sd-open" value="10:00">
+        </div>
+        <div class="cfg-field" id="sd-close-wrap">
+          <div class="cfg-label">Closes at</div>
+          <input type="time" class="cfg-input" id="sd-close" value="16:00">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="sd-cancel">Cancel</button>
+      <button class="btn btn-primary" id="sd-add">Add Date</button>
+    </div>
+  </div>
+</div>
+
+<!-- REMOVE MEMBER CONFIRM MODAL -->
+<div class="modal-backdrop" id="modal-remove">
+  <div class="modal" style="width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Remove Team Member</div>
+      <button class="modal-close" id="remove-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--black);line-height:1.6" id="remove-text"></p>
+      <div style="background:#fee5e5;border:2px solid #f9aaaa;border-radius:10px;padding:12px 16px;margin-top:14px;font-size:13px;color:#c00;line-height:1.5">
+        Their active session will be terminated immediately. This cannot be undone.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="remove-cancel">Cancel</button>
+      <button class="btn btn-danger" id="remove-confirm">Remove Member</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+var PHONES = [
+  {id:1, outlet:"Main Street",   tringg:"+1 (415) 555-0192", existing:"+1 (212) 555-0100", carrier:"AT&T Mobility",   status:"verified",  fallback:"+1 (212) 555-0199"},
+  {id:2, outlet:"Midtown",       tringg:"+1 (646) 555-0381", existing:"+1 (646) 555-0300", carrier:"Verizon Wireless", status:"pending",   fallback:"+1 (646) 555-0399"},
+];
+
+var HOURS = [
+  {day:"Mon", open:true,  from:"12:00", to:"22:00"},
+  {day:"Tue", open:true,  from:"12:00", to:"22:00"},
+  {day:"Wed", open:true,  from:"12:00", to:"22:00"},
+  {day:"Thu", open:true,  from:"12:00", to:"23:00"},
+  {day:"Fri", open:true,  from:"12:00", to:"23:30"},
+  {day:"Sat", open:true,  from:"11:00", to:"23:30"},
+  {day:"Sun", open:true,  from:"11:00", to:"21:00"}
+];
+
+var SPECIAL_DATES = [
+  {id:1, date:"2025-12-25", label:"Christmas Day",  type:"closed",  from:"",      to:""},
+  {id:2, date:"2025-12-31", label:"New Year's Eve", type:"custom",  from:"12:00", to:"16:00"},
+  {id:3, date:"2026-01-01", label:"New Year's Day", type:"closed",  from:"",      to:""}
+];
+
+var TEAM = [
+  {id:1, name:"Aditya Sharma",  email:"aditya@rossa.com",   role:"Owner",   status:"active",  avatar:"AS", color:"#F5E642"},
+  {id:2, name:"Priya Nair",     email:"priya@rossa.com",    role:"Manager", status:"active",  avatar:"PN", color:"#7FE8D8"},
+  {id:3, name:"James Okafor",   email:"james@rossa.com",    role:"Staff",   status:"active",  avatar:"JO", color:"#F0A090"},
+  {id:4, name:"Sofia Rossi",    email:"sofia@rossa.com",    role:"Manager", status:"invited", avatar:"SR", color:"#e8f0fe"}
+];
+
+var NOTIF_EVENTS = [
+  {id:"new_res",    label:"New Reservation Request", desc:"Agent captures a new booking",       visual:true,  sound:true},
+  {id:"confirmed",  label:"Reservation Confirmed",   desc:"You confirm a pending request",      visual:true,  sound:false},
+  {id:"cancelled",  label:"Reservation Cancelled",   desc:"A booking is declined or cancelled", visual:true,  sound:true},
+  {id:"expiring",   label:"Expiring Soon",            desc:"Request has 2 minutes remaining",   visual:true,  sound:true},
+  {id:"expired",    label:"Request Expired",          desc:"Pending request auto-expired",       visual:false, sound:true},
+  {id:"call_start", label:"Call Started",             desc:"Agent answers an incoming call",     visual:true,  sound:false}
+];
+
+var confirmMode = "request"; // "request" or "instant"
+var masterSound = true;
+var pendingRemoveId = null;
+var currentSection = "phone";
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function el(tag, cls) { var e = document.createElement(tag); if (cls) e.className = cls; return e; }
+function div(cls) { return el("div", cls); }
+function span(cls, txt) { var e = el("span", cls); if (txt) e.textContent = txt; return e; }
+function p(cls, txt) { var e = el("p", cls); if (txt) e.textContent = txt; return e; }
+function mk(tag, txt) { var e = document.createElement(tag); e.textContent = txt; return e; }
+function inp(type, val, ph, cls) {
+  var e = el("input", cls || "cfg-input"); e.type = type;
+  if (val !== undefined) e.value = val;
+  if (ph) e.placeholder = ph;
+  return e;
+}
+function sel(opts, val, cls) {
+  var e = el("select", cls || "cfg-select");
+  opts.forEach(function(o) {
+    var op = document.createElement("option");
+    op.value = o.v !== undefined ? o.v : o; op.textContent = o.l || o;
+    if (o.v === val || o === val) op.selected = true;
+    e.appendChild(op);
+  });
+  return e;
+}
+function toggle(checked, onChange) {
+  var wrap = el("label","toggle");
+  var input = el("input"); input.type = "checkbox"; input.checked = checked;
+  var track = el("div","tog-track");
+  var thumb = el("div","tog-thumb");
+  if (onChange) input.addEventListener("change", function() { onChange(this.checked); });
+  track.addEventListener("click", function() { input.click(); });
+  wrap.appendChild(input); wrap.appendChild(track); wrap.appendChild(thumb);
+  return wrap;
+}
+function cfgField(label, control, subLabel) {
+  var f = div("cfg-field");
+  var l = el("label","cfg-label"); l.textContent = label; f.appendChild(l);
+  if (subLabel) { var sl = div("cfg-label-sub"); sl.textContent = subLabel; f.appendChild(sl); }
+  f.appendChild(control);
+  return f;
+}
+function secCard(titleTxt, icon, subtitleTxt) {
+  var card = div("sec-card");
+  var titleRow = div("sec-title");
+  var ic = span("cfg-section-icon", icon);
+  titleRow.appendChild(ic);
+  titleRow.appendChild(document.createTextNode(" " + titleTxt));
+  card.appendChild(titleRow);
+  if (subtitleTxt) {
+    var sub = div("sec-subtitle"); sub.textContent = subtitleTxt; card.appendChild(sub);
+  }
+  return card;
+}
+function grid2(fields) {
+  var g = div("cfg-grid cfg-grid-2");
+  fields.forEach(function(f) { g.appendChild(f); });
+  return g;
+}
+function grid1(fields) {
+  var g = div("cfg-grid cfg-grid-1");
+  fields.forEach(function(f) { g.appendChild(f); });
+  return g;
+}
+function divider() { return div("sec-divider"); }
+
+// ─── SECTION ROUTER ───────────────────────────────────────────────────────────
+function renderSection(section) {
+  currentSection = section;
+  document.querySelectorAll(".ss-item").forEach(function(item) {
+    item.classList.toggle("active", item.dataset.section === section);
+  });
+  var body = document.getElementById("settings-body");
+  while (body.firstChild) body.removeChild(body.firstChild);
+  if (section === "phone")         renderPhoneNumbers(body);
+  else if (section === "brand")         renderBrandProfile(body);
+  else if (section === "tables")        renderTableConfig(body);
+  else if (section === "team")          renderTeam(body);
+  else if (section === "notifications") renderNotifications(body);
+}
+
+// ─── PHONE NUMBERS ────────────────────────────────────────────────────────────
+function renderPhoneNumbers(body) {
+
+  // Numbers table card
+  var card = secCard("Phone Numbers", "📞", "Each outlet has its own Tringg virtual number. Calls to your existing number are forwarded here.");
+
+  // Table
+  var tableWrap = div(""); tableWrap.style.overflowX = "auto";
+  var table = el("table","phone-table");
+
+  var thead = document.createElement("thead");
+  var hrow = document.createElement("tr");
+  ["Outlet","Tringg Number","Your Number","Carrier","Forwarding","Fallback","Actions"].forEach(function(h) {
+    var th = document.createElement("th"); th.textContent = h; hrow.appendChild(th);
+  });
+  thead.appendChild(hrow); table.appendChild(thead);
+
+  var tbody = document.createElement("tbody");
+  PHONES.forEach(function(ph) {
+    var tr = document.createElement("tr");
+
+    // outlet
+    var tdO = document.createElement("td");
+    var oname = div("outlet-name-tag"); oname.textContent = "Rossa — " + ph.outlet;
+    var osub  = div("outlet-sub"); osub.textContent = "Rossa · " + ph.outlet;
+    tdO.appendChild(oname); tdO.appendChild(osub); tr.appendChild(tdO);
+
+    // tringg number
+    var tdT = document.createElement("td");
+    var numRow = div(""); numRow.style.display = "flex"; numRow.style.alignItems = "center"; numRow.style.gap = "8px";
+    var numSpan = span("phone-num", ph.tringg);
+    var copyBtn = el("button","copy-btn"); copyBtn.textContent = "Copy";
+    copyBtn.dataset.num = ph.tringg;
+    copyBtn.addEventListener("click", function() { showToast("Copied: " + this.dataset.num); });
+    numRow.appendChild(numSpan); numRow.appendChild(copyBtn);
+    tdT.appendChild(numRow); tr.appendChild(tdT);
+
+    // existing
+    var tdE = document.createElement("td");
+    tdE.appendChild(span("phone-num", ph.existing)); tr.appendChild(tdE);
+
+    // carrier
+    var tdC = document.createElement("td");
+    tdC.style.fontSize = "13px"; tdC.style.color = "var(--black)"; tdC.textContent = ph.carrier; tr.appendChild(tdC);
+
+    // forwarding status
+    var tdF = document.createElement("td");
+    var cls = ph.status === "verified" ? "fw-badge fw-verified" : ph.status === "error" ? "fw-badge fw-error" : "fw-badge fw-pending";
+    var dot = ph.status === "verified" ? "✓ Verified" : ph.status === "error" ? "✕ Error" : "⏳ Pending";
+    tdF.appendChild(span(cls, dot)); tr.appendChild(tdF);
+
+    // fallback
+    var tdFb = document.createElement("td");
+    tdFb.appendChild(span("phone-num", ph.fallback)); tr.appendChild(tdFb);
+
+    // actions
+    var tdA = document.createElement("td");
+    var actRow = div(""); actRow.style.display = "flex"; actRow.style.gap = "6px";
+    var instrBtn = el("button","btn btn-ghost btn-sm"); instrBtn.textContent = "Instructions";
+    instrBtn.dataset.phoneId = ph.id;
+    instrBtn.addEventListener("click", function() { toggleForwardingBox(parseInt(this.dataset.phoneId, 10)); });
+    var testBtn = el("button","btn btn-teal btn-sm"); testBtn.textContent = "Test";
+    testBtn.addEventListener("click", function() { showToast("Test call placed to " + ph.existing + "…"); });
+    actRow.appendChild(instrBtn); actRow.appendChild(testBtn);
+    tdA.appendChild(actRow); tr.appendChild(tdA);
+
+    tbody.appendChild(tr);
+
+    // Forwarding instructions row (hidden by default)
+    var fwTr = document.createElement("tr");
+    fwTr.id = "fw-row-" + ph.id;
+    fwTr.style.display = "none";
+    var fwTd = document.createElement("td"); fwTd.colSpan = 7;
+    fwTd.appendChild(buildForwardingBox(ph));
+    fwTr.appendChild(fwTd);
+    tbody.appendChild(fwTr);
+  });
+
+  table.appendChild(tbody);
+  tableWrap.appendChild(table);
+  card.appendChild(tableWrap);
+
+  // Add outlet button
+  var addRow = div(""); addRow.style.cssText = "display:flex;justify-content:flex-end;margin-top:18px";
+  var addBtn = el("button","btn btn-ghost"); addBtn.textContent = "+ Add Outlet Number";
+  addBtn.addEventListener("click", function() { showToast("Opening outlet setup…"); });
+  addRow.appendChild(addBtn);
+  card.appendChild(addRow);
+
+  body.appendChild(card);
+}
+
+function buildForwardingBox(ph) {
+  var box = div("fw-box");
+
+  var title = div("fw-box-title");
+  title.appendChild(span(null,"📡 "));
+  title.appendChild(document.createTextNode("Call Forwarding — " + ph.carrier));
+  box.appendChild(title);
+
+  var steps;
+  if (ph.carrier.indexOf("AT&T") !== -1) {
+    steps = [
+      {text: "Open your phone dialpad and enter the forwarding activation code:", code: "*21*"},
+      {text: "Immediately type your Tringg number (no spaces):", code: "+14155550192"},
+      {text: "Press the # key to complete, then tap Call. Listen for the confirmation tone."},
+      {text: "To verify, dial and you should hear your Tringg agent answer."}
+    ];
+  } else {
+    steps = [
+      {text: "Open your phone dialpad and enter the conditional forwarding code:", code: "*71"},
+      {text: "Dial your Tringg number immediately after:", code: "+16465550381"},
+      {text: "Press Send / Call. Wait for the confirmation message."},
+      {text: "Call your outlet number from another phone to verify forwarding is active."}
+    ];
+  }
+
+  steps.forEach(function(s, i) {
+    var row = div("fw-step");
+    var num = div("fw-step-num"); num.textContent = String(i+1);
+    var textWrap = div("fw-step-text");
+    textWrap.appendChild(document.createTextNode(s.text));
+    if (s.code) {
+      textWrap.appendChild(document.createElement("br"));
+      var codeEl = span("fw-step-code", s.code);
+      textWrap.appendChild(codeEl);
+    }
+    row.appendChild(num); row.appendChild(textWrap);
+    box.appendChild(row);
+  });
+
+  var copyRow = div("fw-copy-row");
+  var cpPlain = el("button","fw-copy-btn fw-copy-plain"); cpPlain.textContent = "Copy as Text";
+  cpPlain.addEventListener("click", function() { showToast("Instructions copied to clipboard"); });
+  var cpSms = el("button","fw-copy-btn fw-copy-sms"); cpSms.textContent = "SMS to My Mobile";
+  cpSms.addEventListener("click", function() { showToast("Instructions sent via SMS"); });
+  copyRow.appendChild(cpPlain); copyRow.appendChild(cpSms);
+  box.appendChild(copyRow);
+  return box;
+}
+
+var openFwId = null;
+function toggleForwardingBox(id) {
+  if (openFwId && openFwId !== id) {
+    var prev = document.getElementById("fw-row-" + openFwId);
+    if (prev) prev.style.display = "none";
+  }
+  var row = document.getElementById("fw-row-" + id);
+  if (!row) return;
+  var isOpen = row.style.display !== "none";
+  row.style.display = isOpen ? "none" : "table-row";
+  openFwId = isOpen ? null : id;
+}
+
+// ─── BRAND PROFILE ────────────────────────────────────────────────────────────
+function renderBrandProfile(body) {
+
+  var card = secCard("Brand Profile", "🏷", "These details are used by your AI agent on every call and appear on guest confirmation messages.");
+
+  var g = div("cfg-grid cfg-grid-2");
+  g.appendChild(cfgField("Brand Name",   inp("text","Rossa","")));
+  g.appendChild(cfgField("Cuisine Type", sel(["Italian","Modern European","Asian Fusion","American","Mediterranean","Bar & Grill","Cafe"],"Italian")));
+  g.appendChild(cfgField("Website",      inp("url","https://rossa-nyc.com","")));
+  g.appendChild(cfgField("Logo URL",     inp("url","https://cdn.rossa-nyc.com/logo.png","")));
+  card.appendChild(g);
+
+  card.appendChild(divider());
+  var title2 = div("sec-title"); title2.style.marginBottom = "14px";
+  title2.appendChild(span("cfg-section-icon","📍"));
+  title2.appendChild(document.createTextNode(" Outlet Details"));
+  card.appendChild(title2);
+
+  var g2 = div("cfg-grid cfg-grid-2");
+  g2.appendChild(cfgField("Outlet Name",  inp("text","Main Street","")));
+  g2.appendChild(cfgField("Phone",        inp("tel","+1 (212) 555-0100","")));
+  var addrField = cfgField("Address", inp("text","345 W 14th St",""));
+  addrField.classList.add("full");
+  g2.appendChild(addrField);
+  g2.appendChild(cfgField("City",     inp("text","New York","")));
+  g2.appendChild(cfgField("State",    inp("text","NY","")));
+  g2.appendChild(cfgField("ZIP",      inp("text","10014","")));
+  g2.appendChild(cfgField("Country",  sel(["United States","United Kingdom","Canada","Australia","India"],"United States")));
+  g2.appendChild(cfgField("Timezone", sel(["America/New_York","America/Chicago","America/Denver","America/Los_Angeles","Europe/London","Asia/Kolkata"],"America/New_York")));
+  var emailField = cfgField("Outlet Email", inp("email","hello@rossa-nyc.com",""));
+  emailField.classList.add("full");
+  g2.appendChild(emailField);
+  card.appendChild(g2);
+
+  body.appendChild(card);
+}
+
+// ─── TABLE CONFIG ─────────────────────────────────────────────────────────────
+function renderTableConfig(body) {
+
+  // Booking rules
+  var card1 = secCard("Booking Rules", "📋", "These rules are injected into your AI agent automatically. The agent enforces them on every call.");
+
+  var g1 = div("cfg-grid cfg-grid-2");
+  g1.appendChild(cfgField("Max Reservations / Day",    inp("number","50","","cfg-input"),  "Max 500"));
+  g1.appendChild(cfgField("Reservation Duration",      sel([{v:"30",l:"30 minutes"},{v:"45",l:"45 minutes"},{v:"60",l:"60 minutes"},{v:"90",l:"90 minutes (default)"},{v:"120",l:"120 minutes"}],"90")));
+  g1.appendChild(cfgField("Min Party Size",             inp("number","1","","cfg-input")));
+  g1.appendChild(cfgField("Max Party Size",             inp("number","12","","cfg-input"), "Agent rejects larger groups"));
+  g1.appendChild(cfgField("Buffer Between Bookings",    sel([{v:"0",l:"None"},{v:"15",l:"15 minutes (default)"},{v:"30",l:"30 minutes"},{v:"45",l:"45 minutes"},{v:"60",l:"60 minutes"}],"15")));
+  g1.appendChild(cfgField("Advance Booking Window",     sel([{v:"today",l:"Today only"},{v:"7",l:"7 days"},{v:"14",l:"14 days"},{v:"30",l:"30 days (default)"},{v:"60",l:"60 days"},{v:"90",l:"90 days"}],"30")));
+  g1.appendChild(cfgField("Minimum Notice",             sel([{v:"30m",l:"30 minutes"},{v:"1h",l:"1 hour (default)"},{v:"2h",l:"2 hours"},{v:"4h",l:"4 hours"},{v:"sameday",l:"Same day"},{v:"24h",l:"24 hours"}],"1h")));
+  card1.appendChild(g1);
+  body.appendChild(card1);
+
+  // Confirmation mode
+  var card2 = secCard("Confirmation Mode", "✅", "Controls whether reservations need your approval or are confirmed automatically.");
+  var modeGrid = div("conf-mode-grid");
+
+  var reqCard = div("conf-card" + (confirmMode==="request" ? " selected" : ""));
+  reqCard.dataset.mode = "request";
+  var reqTitle = div("cc-title"); reqTitle.textContent = "Request to Book";
+  var reqDesc  = div("cc-desc");  reqDesc.textContent  = "Every reservation request lands in your Pending queue. You confirm or decline manually.";
+  var reqBadge = div("cc-badge"); reqBadge.textContent = "Default — recommended";
+  reqCard.appendChild(reqTitle); reqCard.appendChild(reqDesc); reqCard.appendChild(reqBadge);
+  reqCard.addEventListener("click", function() { confirmMode = "request"; rerenderModeCards(modeGrid); });
+
+  var instCard = div("conf-card" + (confirmMode==="instant" ? " selected" : ""));
+  instCard.dataset.mode = "instant";
+  var instTitle = div("cc-title"); instTitle.textContent = "Instant Book";
+  var instDesc  = div("cc-desc");  instDesc.textContent  = "If capacity is available, reservations are auto-confirmed. No manual action required.";
+  var instBadge = div("cc-badge"); instBadge.textContent = "Auto-confirms within seconds";
+  instCard.appendChild(instTitle); instCard.appendChild(instDesc); instCard.appendChild(instBadge);
+  instCard.addEventListener("click", function() { confirmMode = "instant"; rerenderModeCards(modeGrid); });
+
+  modeGrid.appendChild(reqCard); modeGrid.appendChild(instCard);
+  card2.appendChild(modeGrid);
+  body.appendChild(card2);
+
+  // Business hours
+  var card3 = secCard("Business Hours", "🕐", "The agent uses these hours to validate booking requests and inform callers.");
+  var hoursGrid = div("hours-grid");
+  HOURS.forEach(function(h, idx) {
+    var row = div("hours-row" + (!h.open ? " closed" : ""));
+    row.id = "hours-row-" + idx;
+
+    var dayLabel = div("hours-day"); dayLabel.textContent = h.day;
+
+    var tog = toggle(h.open, function(checked) {
+      HOURS[idx].open = checked;
+      row.classList.toggle("closed", !checked);
+      openInput.disabled  = !checked;
+      closeInput.disabled = !checked;
+    });
+    tog.className = "hours-toggle";
+
+    var timesWrap = div("hours-times");
+    var openInput  = el("input","time-input"); openInput.type  = "time"; openInput.value = h.from; openInput.disabled = !h.open;
+    var sep = span("hours-sep","—");
+    var closeInput = el("input","time-input"); closeInput.type = "time"; closeInput.value = h.to; closeInput.disabled = !h.open;
+
+    openInput.addEventListener("change",  function() { HOURS[idx].from = this.value; });
+    closeInput.addEventListener("change", function() { HOURS[idx].to   = this.value; });
+
+    timesWrap.appendChild(openInput); timesWrap.appendChild(sep); timesWrap.appendChild(closeInput);
+    row.appendChild(dayLabel); row.appendChild(tog); row.appendChild(timesWrap);
+    hoursGrid.appendChild(row);
+  });
+  card3.appendChild(hoursGrid);
+  body.appendChild(card3);
+
+  // Special dates
+  var card4 = secCard("Special Dates", "📆", "Closures and custom hours for holidays or events. Future dates only.");
+  renderSpecialDatesList(card4);
+  var addSdRow = div(""); addSdRow.style.cssText = "display:flex;justify-content:flex-end;margin-top:14px";
+  var addSdBtn = el("button","btn btn-ghost"); addSdBtn.textContent = "+ Add Special Date";
+  addSdBtn.addEventListener("click", function() {
+    document.getElementById("modal-special-date").classList.add("open");
+  });
+  addSdRow.appendChild(addSdBtn);
+  card4.appendChild(addSdRow);
+  body.appendChild(card4);
+}
+
+function renderSpecialDatesList(card) {
+  var listId = "sd-list";
+  var existing = document.getElementById(listId);
+  if (existing) existing.parentNode.removeChild(existing);
+  var list = div(""); list.id = listId;
+  SPECIAL_DATES.forEach(function(sd) {
+    var row = div("special-date-row");
+    var dateEl  = div("sd-date");  dateEl.textContent  = formatDate(sd.date);
+    var labelEl = div("sd-label"); labelEl.textContent = sd.label || "—";
+    var typeBadge = span(sd.type==="closed" ? "sd-closed" : "sd-custom", sd.type==="closed" ? "Closed all day" : sd.from + " – " + sd.to);
+    var delBtn = el("button","sd-del"); delBtn.textContent = "✕";
+    delBtn.dataset.sdId = sd.id;
+    delBtn.addEventListener("click", function() {
+      var id = parseInt(this.dataset.sdId,10);
+      SPECIAL_DATES = SPECIAL_DATES.filter(function(x){return x.id!==id;});
+      renderSpecialDatesList(card);
+      showToast("Special date removed");
+    });
+    row.appendChild(dateEl); row.appendChild(labelEl); row.appendChild(typeBadge); row.appendChild(delBtn);
+    list.appendChild(row);
+  });
+  if (!SPECIAL_DATES.length) {
+    var empty = div(""); empty.style.cssText = "padding:20px;text-align:center;color:#bbb;font-size:13px";
+    empty.textContent = "No special dates added yet.";
+    list.appendChild(empty);
+  }
+  // Insert before the add button row (last child) — or just append
+  card.appendChild(list);
+}
+
+function rerenderModeCards(modeGrid) {
+  modeGrid.querySelectorAll(".conf-card").forEach(function(c) {
+    c.classList.toggle("selected", c.dataset.mode === confirmMode);
+  });
+}
+
+function formatDate(str) {
+  var d = new Date(str + "T12:00:00");
+  return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+}
+
+// ─── TEAM ─────────────────────────────────────────────────────────────────────
+function renderTeam(body) {
+  var card = secCard("Team Members", "👥", "Control who has access to your Tringg dashboard and what they can do.");
+
+  // Invite button row
+  var inviteRow = div(""); inviteRow.style.cssText = "display:flex;justify-content:flex-end;margin-bottom:18px";
+  var inviteBtn = el("button","btn btn-primary"); inviteBtn.textContent = "+ Invite Member";
+  inviteBtn.addEventListener("click", function() { document.getElementById("modal-invite").classList.add("open"); });
+  inviteRow.appendChild(inviteBtn);
+  card.appendChild(inviteRow);
+
+  var tableWrap = div(""); tableWrap.style.overflowX = "auto";
+  var table = el("table","team-table");
+  var thead = document.createElement("thead");
+  var hrow  = document.createElement("tr");
+  ["Member","Role","Status","Last Active","Actions"].forEach(function(h) {
+    var th = document.createElement("th"); th.textContent = h; hrow.appendChild(th);
+  });
+  thead.appendChild(hrow); table.appendChild(thead);
+
+  var tbody = document.createElement("tbody");
+  TEAM.forEach(function(m) {
+    var tr = document.createElement("tr");
+
+    // member
+    var tdM = document.createElement("td");
+    var memRow = div(""); memRow.style.cssText = "display:flex;align-items:center;gap:12px";
+    var av = div("member-av"); av.textContent = m.avatar; av.style.background = m.color;
+    var mInfo = div("");
+    var mName  = div("member-name"); mName.textContent = m.name;
+    var mEmail = div("member-email"); mEmail.textContent = m.email;
+    mInfo.appendChild(mName); mInfo.appendChild(mEmail);
+    memRow.appendChild(av); memRow.appendChild(mInfo);
+    tdM.appendChild(memRow); tr.appendChild(tdM);
+
+    // role
+    var tdR = document.createElement("td");
+    var roleCls = m.role==="Owner" ? "role-badge role-owner" : m.role==="Manager" ? "role-badge role-manager" : "role-badge role-staff";
+    tdR.appendChild(span(roleCls, m.role)); tr.appendChild(tdR);
+
+    // status
+    var tdS = document.createElement("td");
+    tdS.appendChild(span(m.status==="active" ? "member-status-active" : "member-status-invited", m.status==="active" ? "● Active" : "◌ Invited")); tr.appendChild(tdS);
+
+    // last active
+    var tdL = document.createElement("td");
+    tdL.style.cssText = "font-size:13px;color:#aaa";
+    tdL.textContent = m.status==="invited" ? "—" : (m.id===1 ? "Just now" : m.id===2 ? "2 hours ago" : "Yesterday"); tr.appendChild(tdL);
+
+    // actions
+    var tdA = document.createElement("td");
+    var actRow = div(""); actRow.style.display = "flex"; actRow.style.gap = "6px";
+    if (m.role !== "Owner") {
+      var removeBtn = el("button","btn btn-danger btn-sm"); removeBtn.textContent = "Remove";
+      removeBtn.dataset.memberId = m.id;
+      removeBtn.addEventListener("click", function() {
+        pendingRemoveId = parseInt(this.dataset.memberId,10);
+        var member = TEAM.filter(function(x){return x.id===pendingRemoveId;})[0];
+        document.getElementById("remove-text").textContent = "Remove " + member.name + " (" + member.email + ") from Rossa Main Street? They will immediately lose access to the dashboard.";
+        document.getElementById("modal-remove").classList.add("open");
+      });
+      actRow.appendChild(removeBtn);
+    } else {
+      var ownerNote = span(null,"Owner"); ownerNote.style.cssText = "font-size:12px;color:#bbb;padding:6px 0";
+      actRow.appendChild(ownerNote);
+    }
+    tdA.appendChild(actRow); tr.appendChild(tdA);
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  tableWrap.appendChild(table);
+  card.appendChild(tableWrap);
+
+  // Roles legend
+  var legend = secCard("Role Permissions", "🔑", "");
+  var legendGrid = div("cfg-grid cfg-grid-3");
+
+  function legendCard(role, color, perms) {
+    var c = div(""); c.style.cssText = "border:var(--border);border-radius:12px;padding:14px 16px;background:#f9f8f5";
+    var title = div(""); title.style.cssText = "font-size:13px;font-weight:800;color:var(--black);margin-bottom:10px;display:flex;align-items:center;gap:8px";
+    var badge = span("role-badge " + color, role); badge.style.fontSize = "11px";
+    title.appendChild(badge);
+    c.appendChild(title);
+    perms.forEach(function(perm) {
+      var row = div(""); row.style.cssText = "display:flex;align-items:center;gap:7px;font-size:12px;color:#666;margin-bottom:5px";
+      var tick = span(null, perm.ok ? "✓" : "✕"); tick.style.color = perm.ok ? "#1a6e3a" : "#e55"; tick.style.fontWeight = "800";
+      row.appendChild(tick); row.appendChild(document.createTextNode(perm.label));
+      c.appendChild(row);
+    });
+    return c;
+  }
+
+  legendGrid.appendChild(legendCard("Owner","role-owner",[
+    {ok:true,label:"All reservations & calls"},
+    {ok:true,label:"Agent configuration"},
+    {ok:true,label:"Settings & billing"},
+    {ok:true,label:"Team management"}
+  ]));
+  legendGrid.appendChild(legendCard("Manager","role-manager",[
+    {ok:true,label:"All reservations & calls"},
+    {ok:true,label:"Agent configuration"},
+    {ok:false,label:"Billing & subscription"},
+    {ok:false,label:"Team management"}
+  ]));
+  legendGrid.appendChild(legendCard("Staff","role-staff",[
+    {ok:true,label:"Today's reservations only"},
+    {ok:true,label:"Today's calls (read-only)"},
+    {ok:false,label:"Agent configuration"},
+    {ok:false,label:"Settings"}
+  ]));
+  legendGrid.appendChild(legendCard);
+  legend.appendChild(legendGrid);
+
+  body.appendChild(card);
+  body.appendChild(legend);
+}
+
+// ─── NOTIFICATIONS ────────────────────────────────────────────────────────────
+function renderNotifications(body) {
+
+  var card = secCard("Notification Preferences", "🔔", "Choose which events trigger visual browser alerts and sound alerts. Visual alerts require browser notification permission.");
+
+  // Master sound switch
+  var ms = div("master-sound");
+  var msInfo = div("ms-info");
+  var msTitle = div("ms-title"); msTitle.textContent = "Master Sound Switch";
+  var msSub   = div("ms-sub");   msSub.textContent   = "Disable all sound notifications globally — useful during off-hours.";
+  msInfo.appendChild(msTitle); msInfo.appendChild(msSub);
+  var msTog = toggle(masterSound, function(checked) {
+    masterSound = checked;
+    showToast(checked ? "Sound notifications enabled" : "All sounds muted");
+  });
+  ms.appendChild(msInfo); ms.appendChild(msTog);
+  card.appendChild(ms);
+
+  var tableWrap = div(""); tableWrap.style.overflowX = "auto";
+  var table = el("table","notif-table");
+
+  var thead = document.createElement("thead");
+  var hrow  = document.createElement("tr");
+  var thEvent = document.createElement("th"); thEvent.textContent = "Event"; thEvent.style.textAlign = "left";
+  var thVisual = document.createElement("th"); thVisual.textContent = "Visual";
+  var thSound  = document.createElement("th"); thSound.textContent  = "Sound";
+  hrow.appendChild(thEvent); hrow.appendChild(thVisual); hrow.appendChild(thSound);
+  thead.appendChild(hrow); table.appendChild(thead);
+
+  var tbody = document.createElement("tbody");
+  NOTIF_EVENTS.forEach(function(ev, idx) {
+    var tr = document.createElement("tr");
+
+    var tdE = document.createElement("td");
+    var evName = div("notif-event"); evName.textContent = ev.label;
+    var evDesc = div("notif-desc");  evDesc.textContent = ev.desc;
+    tdE.appendChild(evName); tdE.appendChild(evDesc); tr.appendChild(tdE);
+
+    var tdV = document.createElement("td");
+    var vTog = toggle(ev.visual, function(checked) {
+      NOTIF_EVENTS[idx].visual = checked;
+      if (checked) showToast("Visual alert on: " + ev.label);
+    });
+    tdV.appendChild(vTog); tr.appendChild(tdV);
+
+    var tdS = document.createElement("td");
+    var sTog = toggle(ev.sound, function(checked) {
+      NOTIF_EVENTS[idx].sound = checked;
+      if (checked) showToast("Sound alert on: " + ev.label);
+    });
+    tdS.appendChild(sTog); tr.appendChild(tdS);
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  tableWrap.appendChild(table);
+  card.appendChild(tableWrap);
+
+  // Browser permission note
+  var note = div(""); note.style.cssText = "margin-top:16px;padding:12px 16px;background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;font-size:13px;color:#888;display:flex;align-items:center;gap:10px;line-height:1.5";
+  note.appendChild(span(null,"💡"));
+  note.appendChild(document.createTextNode(" Visual notifications require browser permission. If alerts aren't appearing, check your browser settings and ensure notifications are allowed for this site."));
+  card.appendChild(note);
+
+  body.appendChild(card);
+
+  // Expiry timer config
+  var card2 = secCard("Pending Request Expiry", "⏱", "How long a pending reservation request waits before auto-expiring if you take no action.");
+  var g = div("cfg-grid cfg-grid-2");
+  g.appendChild(cfgField("Expiry Window", sel([{v:"5",l:"5 minutes"},{v:"10",l:"10 minutes (default)"},{v:"15",l:"15 minutes"},{v:"20",l:"20 minutes"},{v:"30",l:"30 minutes"}],"10"), "Agent tells caller confirmation arrives within this window"));
+  g.appendChild(cfgField("Warning Threshold", sel([{v:"1",l:"1 minute before"},{v:"2",l:"2 minutes before (default)"},{v:"3",l:"3 minutes before"}],"2"), "When the countdown turns red"));
+  card2.appendChild(g);
+  body.appendChild(card2);
+}
+
+// ─── MODALS ───────────────────────────────────────────────────────────────────
+document.getElementById("invite-close").addEventListener("click",  function() { document.getElementById("modal-invite").classList.remove("open"); });
+document.getElementById("invite-cancel").addEventListener("click", function() { document.getElementById("modal-invite").classList.remove("open"); });
+document.getElementById("invite-send").addEventListener("click",   function() {
+  var email = document.getElementById("invite-email").value.trim();
+  if (!email) { showToast("Enter an email address first"); return; }
+  document.getElementById("modal-invite").classList.remove("open");
+  showToast("Invite sent to " + email);
+});
+
+document.getElementById("sd-close").addEventListener("click",  function() { document.getElementById("modal-special-date").classList.remove("open"); });
+document.getElementById("sd-cancel").addEventListener("click", function() { document.getElementById("modal-special-date").classList.remove("open"); });
+document.getElementById("sd-type").addEventListener("change", function() {
+  var isCustom = this.value === "custom";
+  document.getElementById("sd-open-wrap").style.display  = isCustom ? "flex" : "none";
+  document.getElementById("sd-close-wrap").style.display = isCustom ? "flex" : "none";
+});
+document.getElementById("sd-add").addEventListener("click", function() {
+  var date = document.getElementById("sd-date").value;
+  if (!date) { showToast("Select a date first"); return; }
+  var label  = document.getElementById("sd-label").value.trim();
+  var type   = document.getElementById("sd-type").value;
+  var from   = document.getElementById("sd-open").value;
+  var to     = document.getElementById("sd-close").value;
+  var newId  = Date.now();
+  SPECIAL_DATES.push({id:newId, date:date, label:label||"Special closure", type:type, from:from, to:to});
+  SPECIAL_DATES.sort(function(a,b){ return a.date.localeCompare(b.date); });
+  document.getElementById("modal-special-date").classList.remove("open");
+  // Re-render table config section
+  renderSection("tables");
+  showToast("Special date added");
+});
+
+document.getElementById("remove-close").addEventListener("click",  function() { document.getElementById("modal-remove").classList.remove("open"); });
+document.getElementById("remove-cancel").addEventListener("click", function() { document.getElementById("modal-remove").classList.remove("open"); });
+document.getElementById("remove-confirm").addEventListener("click", function() {
+  if (!pendingRemoveId) return;
+  TEAM = TEAM.filter(function(m){ return m.id !== pendingRemoveId; });
+  pendingRemoveId = null;
+  document.getElementById("modal-remove").classList.remove("open");
+  renderSection("team");
+  showToast("Team member removed");
+});
+
+// close modals on backdrop click
+["modal-invite","modal-special-date","modal-remove"].forEach(function(id) {
+  document.getElementById(id).addEventListener("click", function(e) {
+    if (e.target === this) this.classList.remove("open");
+  });
+});
+
+// special date time inputs visibility
+document.getElementById("sd-open-wrap").style.display  = "none";
+document.getElementById("sd-close-wrap").style.display = "none";
+
+// ─── SIDEBAR NAV ─────────────────────────────────────────────────────────────
+document.querySelectorAll(".ss-item").forEach(function(item) {
+  item.addEventListener("click", function() { renderSection(this.dataset.section); });
+});
+
+// ─── NAV ITEMS ────────────────────────────────────────────────────────────────
+document.querySelectorAll(".nav-item").forEach(function(item) {
+  item.addEventListener("click", function() {
+    document.querySelectorAll(".nav-item").forEach(function(n){ n.classList.remove("active"); });
+    item.classList.add("active");
+  });
+});
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var wrap = document.getElementById("toast-wrap");
+  var t = el("div","toast");
+  var ic = el("span"); ic.textContent = "✓"; ic.style.color = "var(--teal)";
+  var tx = el("span"); tx.textContent = " " + msg;
+  t.appendChild(ic); t.appendChild(tx);
+  wrap.appendChild(t);
+  setTimeout(function() {
+    t.style.cssText += ";opacity:0;transform:translateX(20px);transition:all .3s";
+    setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+  }, 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderSection("phone");
+</script>
+</body>
+</html>
