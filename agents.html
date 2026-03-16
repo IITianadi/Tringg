@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tringg — Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#fff;--bg:#f0ede8;
+  --teal:#7FE8D8;--yellow:#F5E642;--salmon:#F0A090;
+  --border:2px solid #0a0a0a;--shadow:4px 4px 0 #0a0a0a;--shadow-lg:6px 6px 0 #0a0a0a;
+  --nav-w:240px;
+}
+html,body{height:100%;background:var(--bg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.shell{display:flex;height:100vh;overflow:hidden}
+
+/* NAV */
+.nav{width:var(--nav-w);flex-shrink:0;background:var(--black);display:flex;flex-direction:column;padding:28px 0;overflow-y:auto}
+.nav-logo{padding:0 22px 26px;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;gap:10px}
+.logo-box{width:36px;height:36px;background:var(--yellow);border-radius:9px;border:2px solid var(--black);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-word{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.4px}
+.nav-sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a3a3a;padding:18px 22px 8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 22px;cursor:pointer;color:#555;font-size:14px;font-weight:500;transition:all .18s;border-left:3px solid transparent}
+.nav-item:hover{color:#fff;background:#111}
+.nav-item.active{color:#fff;background:#141414;border-left-color:var(--yellow)}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:800;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px;background:#e55;color:#fff}
+.nav-outlet{margin-top:auto;padding:16px 22px 0;border-top:1px solid #1a1a1a}
+.outlet-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#3a3a3a;margin-bottom:8px}
+.outlet-sel{width:100%;background:#111;border:1px solid #2a2a2a;border-radius:9px;color:#fff;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;padding:9px 12px;appearance:none;outline:none}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+.topbar{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;border:var(--border);cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif}
+.btn-primary{background:var(--black);color:#fff;box-shadow:var(--shadow)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.btn-ghost{background:#fff;color:var(--black)}
+.btn-ghost:hover{background:#f5f2ec}
+.btn-teal{background:var(--teal);color:var(--black);box-shadow:var(--shadow)}
+.btn-teal:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+.notif-btn{position:relative;width:38px;height:38px;border-radius:9px;background:#f9f8f5;border:2px solid #e0ddd5;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px}
+.n-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;background:#e55;border-radius:50%;border:2px solid #fff}
+.avatar{width:38px;height:38px;border-radius:9px;background:var(--black);border:2px solid var(--black);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--yellow);cursor:pointer}
+
+/* CONTENT AREA */
+.content-area{flex:1;display:flex;overflow:hidden}
+
+/* AGENT LIST PANEL */
+.agent-list-panel{width:380px;flex-shrink:0;border-right:2px solid #e5e2db;background:#fff;display:flex;flex-direction:column;overflow:hidden}
+.alp-header{padding:20px 24px 16px;border-bottom:2px solid #f0ede8;flex-shrink:0}
+.alp-title{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#bbb;margin-bottom:12px}
+.alp-list{flex:1;overflow-y:auto;padding:12px}
+
+/* AGENT CARD in list */
+.agent-card{border:var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:all .18s;background:#fff;box-shadow:var(--shadow)}
+.agent-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.agent-card.selected{background:#fffef0;border-color:var(--yellow);box-shadow:4px 4px 0 #f0c84a}
+.agent-card.active-agent{border-left:5px solid var(--teal)}
+.ac-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.ac-name{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:var(--black);line-height:1.2}
+.ac-template{font-size:11px;color:#aaa;font-weight:500;margin-top:3px}
+.status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:8px;border:2px solid;white-space:nowrap;flex-shrink:0}
+.sp-active{background:#e6f9ee;border-color:#a0dbb5;color:#1a6e3a}
+.sp-draft{background:#f5f2ec;border-color:#ddd;color:#888}
+.sp-paused{background:#fff8e0;border-color:#f0c84a;color:#7a5a00}
+.sp-error{background:#fee5e5;border-color:#f9aaaa;color:#c00}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-active{background:#1a6e3a}
+.dot-draft{background:#bbb}
+.dot-paused{background:#f0c84a}
+.dot-error{background:#e55;animation:pulse .9s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ac-stats{display:flex;gap:14px}
+.ac-stat{font-size:12px;color:#aaa;font-weight:500}
+.ac-stat strong{color:var(--black);font-weight:800}
+.ac-actions{display:flex;gap:7px;margin-top:12px;padding-top:12px;border-top:2px solid #f0ede8}
+.ac-btn{font-size:11px;font-weight:700;padding:5px 12px;border-radius:7px;border:var(--border);cursor:pointer;transition:all .14s;font-family:'Inter',sans-serif;background:#fff;color:var(--black)}
+.ac-btn:hover{background:#f5f2ec}
+.ac-btn.activate{background:var(--teal);color:var(--black)}
+.ac-btn.activate:hover{box-shadow:var(--shadow)}
+.ac-btn.test{background:var(--yellow);color:var(--black)}
+.ac-btn.test:hover{box-shadow:var(--shadow)}
+.ac-btn.danger{color:#c00;border-color:#f9aaaa}
+.ac-btn.danger:hover{background:#fee5e5}
+
+/* MAIN CONFIG PANEL */
+.config-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.cp-header{background:#fff;border-bottom:2px solid #e5e2db;padding:0 32px;height:54px;display:flex;align-items:center;gap:0;flex-shrink:0}
+.cp-tab{padding:0 18px;height:100%;font-size:13px;font-weight:600;cursor:pointer;color:#999;border-bottom:3px solid transparent;display:flex;align-items:center;transition:all .18s;white-space:nowrap}
+.cp-tab:hover{color:var(--black)}
+.cp-tab.active{color:var(--black);border-bottom-color:var(--black)}
+.cp-body{flex:1;overflow-y:auto;padding:28px 32px}
+
+/* CONFIG SECTIONS */
+.cfg-section{background:#fff;border:var(--border);border-radius:18px;box-shadow:var(--shadow);padding:24px 28px;margin-bottom:20px}
+.cfg-section-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:var(--black);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.cfg-section-icon{font-size:18px}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cfg-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+.cfg-grid.cols1{grid-template-columns:1fr}
+.cfg-field{display:flex;flex-direction:column;gap:6px}
+.cfg-field.full{grid-column:1/-1}
+.cfg-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888}
+.cfg-input,.cfg-select,.cfg-textarea{padding:10px 14px;background:#f9f8f5;border:2px solid #e0ddd5;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;color:var(--black);outline:none;transition:border-color .2s;appearance:none;width:100%}
+.cfg-input:focus,.cfg-select:focus,.cfg-textarea:focus{border-color:var(--black)}
+.cfg-textarea{resize:vertical;line-height:1.6}
+.cfg-value{font-size:14px;font-weight:600;color:var(--black)}
+.cfg-sub{font-size:12px;color:#aaa;margin-top:2px}
+
+/* MODEL CARD */
+.model-card{border:var(--border);border-radius:12px;padding:14px 16px;background:#f9f8f5;cursor:pointer;transition:all .15s}
+.model-card:hover{border-color:var(--black)}
+.model-card.selected{background:var(--black);border-color:var(--black)}
+.model-card.selected .mc-name,.model-card.selected .mc-sub{color:#fff}
+.model-card.selected .mc-badge{background:var(--teal);color:var(--black)}
+.mc-name{font-size:13px;font-weight:700;color:var(--black)}
+.mc-sub{font-size:11px;color:#aaa;margin-top:3px}
+.mc-badges{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.mc-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:#f0ede8;border:1px solid #e0ddd5;color:#666}
+
+/* VOICE CARD */
+.voice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.voice-card{border:var(--border);border-radius:12px;padding:14px 16px;background:#f9f8f5;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:8px}
+.voice-card:hover{border-color:var(--black)}
+.voice-card.selected{background:var(--black);border-color:var(--black)}
+.voice-card.selected .vc-name,.voice-card.selected .vc-sub{color:#fff}
+.vc-top{display:flex;align-items:center;justify-content:space-between}
+.vc-name{font-size:13px;font-weight:700;color:var(--black)}
+.vc-sub{font-size:11px;color:#aaa;margin-top:2px}
+.vc-play{width:28px;height:28px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;cursor:pointer}
+.voice-card.selected .vc-play{border-color:#fff;color:#fff}
+.vc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.vc-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;background:#e8f0fe;color:#1a50a0;border:1px solid #a8c4f8}
+.voice-card.selected .vc-tag{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)}
+
+/* TOOL TOGGLES */
+.tool-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:2px solid #f0ede8}
+.tool-row:last-child{border-bottom:none}
+.tool-info{}
+.tool-name{font-size:14px;font-weight:700;color:var(--black)}
+.tool-desc{font-size:12px;color:#aaa;margin-top:3px;line-height:1.4}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{position:absolute;inset:0;border-radius:12px;border:2px solid #ddd;background:#ddd;transition:all .2s;cursor:pointer}
+.toggle input:checked + .tog-track{background:var(--teal);border-color:var(--black)}
+.tog-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;pointer-events:none}
+.toggle input:checked ~ .tog-thumb{transform:translateX(20px)}
+
+/* PROMPT EDITOR */
+.prompt-editor{font-family:'Space Grotesk',monospace;font-size:13px;background:#0a0a0a;color:#7FE8D8;border:var(--border);border-radius:12px;padding:18px;line-height:1.7;resize:vertical;width:100%;outline:none;min-height:180px}
+.variable-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.var-chip{font-size:11px;font-weight:700;padding:4px 11px;border-radius:7px;background:#fffef0;border:2px solid #f0c84a;color:#7a5a00;cursor:pointer;font-family:'Space Grotesk',monospace}
+.var-chip:hover{background:var(--yellow)}
+
+/* TEST PANEL */
+.test-panel{background:#0a0a0a;border:var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.test-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:#fff;margin-bottom:6px}
+.test-sub{font-size:13px;color:#555;margin-bottom:20px;line-height:1.5}
+.test-phone-row{display:flex;gap:10px;align-items:center;margin-bottom:16px}
+.test-phone-input{flex:1;padding:10px 14px;background:#111;border:2px solid #2a2a2a;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;color:#fff;outline:none;transition:border-color .2s}
+.test-phone-input:focus{border-color:var(--yellow)}
+.test-phone-input::placeholder{color:#444}
+.test-call-btn{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 20px;border-radius:10px;border:2px solid var(--teal);background:var(--teal);color:var(--black);cursor:pointer;transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap}
+.test-call-btn:hover{box-shadow:0 0 0 3px rgba(127,232,216,.3)}
+
+/* STATUS BAR */
+.agent-status-bar{background:#fff;border-bottom:2px solid #e5e2db;padding:12px 32px;display:flex;align-items:center;gap:24px;flex-shrink:0}
+.asb-item{display:flex;align-items:center;gap:8px;font-size:13px}
+.asb-label{color:#aaa;font-weight:500}
+.asb-val{font-weight:700;color:var(--black)}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse2 1.4s infinite}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+
+/* SAVE BAR */
+.save-bar{background:#fff;border-top:2px solid #e5e2db;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.save-bar-note{font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px}
+
+/* MODAL */
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,10,10,.55);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px)}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border:var(--border);border-radius:20px;box-shadow:var(--shadow-lg);width:520px;max-width:95vw;max-height:90vh;overflow-y:auto;animation:slideUp .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{padding:22px 28px 16px;border-bottom:2px solid #f0ede8;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--black)}
+.modal-close{width:30px;height:30px;border-radius:8px;border:2px solid #e0ddd5;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.modal-close:hover{border-color:var(--black)}
+.modal-body{padding:22px 28px}
+.modal-footer{padding:14px 28px 22px;display:flex;gap:10px;justify-content:flex-end;border-top:2px solid #f0ede8}
+
+/* TEMPLATE CARDS */
+.tpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tpl-card{border:var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .18s;background:#f9f8f5;position:relative}
+.tpl-card:hover{border-color:var(--black);background:#fff;box-shadow:var(--shadow)}
+.tpl-card.selected{background:var(--black);border-color:var(--black);box-shadow:var(--shadow)}
+.tpl-card.selected .tpl-name,.tpl-card.selected .tpl-desc{color:#fff}
+.tpl-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;background:var(--yellow);border:1px solid var(--black);border-radius:5px;padding:2px 7px;color:var(--black)}
+.tpl-icon{font-size:28px;margin-bottom:10px}
+.tpl-name{font-size:14px;font-weight:800;color:var(--black)}
+.tpl-desc{font-size:12px;color:#888;margin-top:4px;line-height:1.4}
+.tpl-card.selected .tpl-desc{color:#aaa}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:26px;right:26px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;background:var(--black);color:#fff;border:var(--border);border-radius:12px;box-shadow:var(--shadow-lg);padding:12px 16px;font-size:13px;font-weight:600;min-width:240px;pointer-events:all;animation:tin .22s cubic-bezier(.4,0,.2,1)}
+@keyframes tin{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M6.5 4C5.1 4 4 5.1 4 6.5v3C4 10.9 5.1 12 6.5 12H8v2.5a1 1 0 001.7.7l3.3-3.2H17.5c1.4 0 2.5-1.1 2.5-2.5v-3C20 5.1 18.9 4 17.5 4h-11z" fill="black"/>
+        </svg>
+      </div>
+      <span class="logo-word">Tringg</span>
+    </div>
+        <div class="nav-sec">Main</div>
+    <div class="nav-item" id="nav-overview" style="cursor:pointer" onclick="window.location='tringg_s1_s2.html'">⬡ Overview
+    </div>
+    <div class="nav-item" id="nav-reservations" style="cursor:pointer" onclick="window.location='tringg_s3_reservations.html'">📋 Reservations
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" id="nav-calls" style="cursor:pointer" onclick="window.location='tringg_s4_calls.html'">📞 Calls
+    </div>
+    <div class="nav-item active" id="nav-agents" style="cursor:pointer" onclick="window.location='tringg_s5_agents.html'">🤖 Agents
+    </div>
+    <div class="nav-sec">Config</div>
+    <div class="nav-item" id="nav-settings">⚙ Settings</div>
+    <div class="nav-item" id="nav-messaging">💬 Messaging</div>
+    <div class="nav-item" id="nav-analytics">📊 Analytics</div>
+    <div class="nav-outlet">
+      <div class="outlet-lbl">Outlet</div>
+      <select class="outlet-sel">
+        <option>Rossa · Main Street</option>
+        <option>Rossa · Midtown</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Agents</div>
+        <div style="font-size:12px;color:#bbb;font-weight:500">Rossa Main Street</div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-ghost" id="btn-new-agent">+ New Agent</button>
+        <div class="notif-btn">🔔<div class="n-dot"></div></div>
+        <div class="avatar">A</div>
+      </div>
+    </div>
+
+    <!-- content -->
+    <div class="content-area">
+
+      <!-- LEFT: agent list -->
+      <div class="agent-list-panel">
+        <div class="alp-header">
+          <div class="alp-title">Agents for this outlet</div>
+        </div>
+        <div class="alp-list" id="agent-list"></div>
+      </div>
+
+      <!-- RIGHT: config panel -->
+      <div class="config-panel" id="config-panel">
+        <!-- status bar -->
+        <div class="agent-status-bar" id="status-bar"></div>
+        <!-- config tabs -->
+        <div class="cp-header" id="cp-header"></div>
+        <!-- config body -->
+        <div class="cp-body" id="cp-body"></div>
+        <!-- save bar -->
+        <div class="save-bar" id="save-bar">
+          <div class="save-bar-note">
+            <span>⚠</span>
+            <span>Changes to an active agent apply to the next incoming call.</span>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn btn-ghost" onclick="showToast('Changes discarded')">Discard</button>
+            <button class="btn btn-primary" onclick="showToast('Agent saved successfully')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW AGENT MODAL -->
+<div class="modal-backdrop" id="modal-new">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create New Agent</div>
+      <button class="modal-close" id="modal-new-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:#888;margin-bottom:18px;line-height:1.5">Choose a template to start from. You can fully customise it after creation.</p>
+      <div class="tpl-grid" id="tpl-grid"></div>
+      <div style="margin-top:18px">
+        <label style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888;display:block;margin-bottom:7px">Agent Name</label>
+        <input type="text" class="cfg-input" id="new-agent-name" placeholder="e.g. Weekend Peak Agent" style="width:100%">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="modal-new-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-new-create">Create Agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- ACTIVATE CONFIRM MODAL -->
+<div class="modal-backdrop" id="modal-activate">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Activate Agent</div>
+      <button class="modal-close" id="modal-act-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px;color:var(--black);line-height:1.6" id="modal-act-text"></p>
+      <div style="background:#fff8e0;border:2px solid #f0c84a;border-radius:10px;padding:12px 16px;margin-top:16px;font-size:13px;color:#7a5a00;line-height:1.5">
+        Calls in progress on the current agent will complete normally. New calls will be handled by the newly activated agent immediately.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="modal-act-cancel">Cancel</button>
+      <button class="btn btn-teal" id="modal-act-confirm">Activate Agent</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+var AGENTS = [
+  {
+    id:1, name:"Nova — Casual Dining", template:"Casual Dining", status:"active",
+    model:"GPT-4o", voice:"Aria", transcriber:"Deepgram Nova 3",
+    callsToday:41, avgDur:"2:14", captureRate:"68%",
+    tools:{create_reservation:true, answer_faq:true, transfer_call:true, check_availability:false},
+    prompt:"You are Nova, the AI voice assistant for {{restaurant_name}}, located at {{address}}.\n\nYou can take reservations, answer frequently asked questions, and transfer calls to the team when needed.\n\nBusiness hours: {{business_hours}}\nMaximum party size: {{max_party_size}}\nFallback number: {{fallback_number}}\n\nAlways be warm, professional, and concise. If you cannot help, transfer the caller.",
+    firstMsg:"Hi, you've reached {{restaurant_name}}! I'm Nova, the AI assistant. I can take a reservation or answer questions. How can I help?",
+    endMsg:"Thank you for calling {{restaurant_name}}. Have a wonderful day!"
+  },
+  {
+    id:2, name:"Peak Service Agent", template:"Casual Dining", status:"draft",
+    model:"Claude Sonnet 4.6", voice:"Ember", transcriber:"Deepgram Nova 3",
+    callsToday:0, avgDur:"—", captureRate:"—",
+    tools:{create_reservation:true, answer_faq:true, transfer_call:true, check_availability:true},
+    prompt:"You are Ember, the AI assistant for {{restaurant_name}}. You are configured for high-volume peak service periods — be efficient and concise.\n\nBusiness hours: {{business_hours}}\nFallback: {{fallback_number}}",
+    firstMsg:"Hi, {{restaurant_name}} here — how can I help?",
+    endMsg:"Thanks for calling. Have a great evening!"
+  },
+  {
+    id:3, name:"Holiday Closure Agent", template:"General Purpose", status:"paused",
+    model:"Gemini Flash", voice:"Orion", transcriber:"AssemblyAI Universal",
+    callsToday:0, avgDur:"—", captureRate:"—",
+    tools:{create_reservation:false, answer_faq:true, transfer_call:false, check_availability:false},
+    prompt:"You are an assistant for {{restaurant_name}}. The restaurant is currently closed for the holiday period.\n\nInform callers of the closure and offer to take a message or callback request.\n\nReopening: {{special_note}}",
+    firstMsg:"Hi, you've reached {{restaurant_name}}. We're currently closed for the holidays.",
+    endMsg:"Thank you for your patience. We look forward to welcoming you soon!"
+  }
+];
+
+var TEMPLATES = [
+  {id:"casual",  icon:"🍽", name:"Casual Dining",    desc:"Perfect for casual restaurants and bistros. Warm, friendly tone with full booking support.", popular:true},
+  {id:"fine",    icon:"🥂", name:"Fine Dining",       desc:"Polished and refined. Handles complex requests, tasting menus, and VIP preferences.", popular:false},
+  {id:"cafe",    icon:"☕", name:"Fast Casual / Cafe", desc:"Quick and efficient. Optimised for high call volume with minimal conversation.", popular:false},
+  {id:"bar",     icon:"🍸", name:"Bar & Lounge",      desc:"Relaxed and conversational. Handles reservations, events, and bottle service queries.", popular:false},
+  {id:"hotel",   icon:"🏨", name:"Hotel Restaurant",  desc:"Formal and professional. Integrates with hotel guest context.", popular:false},
+  {id:"general", icon:"🤖", name:"General Purpose",   desc:"Blank slate — fully customisable from scratch for any use case.", popular:false}
+];
+
+var MODELS = [
+  {id:"gpt4o",   name:"GPT-4o",          provider:"OpenAI",    lat:"~600ms", cost:"$0.04/min", quality:"Highest"},
+  {id:"claude",  name:"Claude Sonnet 4.6",provider:"Anthropic", lat:"~700ms", cost:"$0.03/min", quality:"High"},
+  {id:"llama",   name:"Llama 4 Maverick",provider:"Groq",      lat:"~280ms", cost:"$0.01/min", quality:"Good"},
+  {id:"gemini",  name:"Gemini Flash",    provider:"Google",    lat:"~350ms", cost:"$0.01/min", quality:"Good"}
+];
+
+var VOICES = [
+  {id:"aria",  name:"Aria",  provider:"ElevenLabs", tags:["Neutral","Clear"],     gender:"Female"},
+  {id:"ember", name:"Ember", provider:"ElevenLabs", tags:["Warm","Expressive"],   gender:"Female"},
+  {id:"orion", name:"Orion", provider:"PlayHT",     tags:["Deep","Professional"], gender:"Male"},
+  {id:"nova",  name:"Nova",  provider:"OpenAI",     tags:["Friendly","Natural"],  gender:"Female"},
+  {id:"atlas", name:"Atlas", provider:"Deepgram",   tags:["Fast","Crisp"],        gender:"Male"},
+  {id:"luna",  name:"Luna",  provider:"Azure",      tags:["Calm","Soothing"],     gender:"Female"}
+];
+
+var TOOL_DEFS = [
+  {id:"create_reservation", name:"Create Reservation", desc:"Agent captures guest details and submits a reservation request to your dashboard."},
+  {id:"answer_faq",         name:"Answer FAQ",         desc:"Agent answers questions from your configured knowledge base. Never guesses."},
+  {id:"transfer_call",      name:"Transfer Call",      desc:"Transfers caller to your fallback number on request or after repeated failures."},
+  {id:"check_availability", name:"Check Availability", desc:"Agent reads your booking rules to answer availability questions in real time."}
+];
+
+var VARIABLES = ["{{restaurant_name}}","{{address}}","{{business_hours}}","{{max_party_size}}","{{fallback_number}}","{{special_note}}"];
+
+var selectedAgentId = 1;
+var selectedTab     = "general";
+var selectedTplId   = "casual";
+var pendingActivate = null;
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function el(tag, cls) {
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  return e;
+}
+function txt(node, t) { node.textContent = t; return node; }
+function getAgent(id) {
+  for (var i=0;i<AGENTS.length;i++) { if (AGENTS[i].id===id) return AGENTS[i]; }
+  return null;
+}
+function statusMeta(s) {
+  var map = {
+    active: {cls:"sp-active", dot:"dot-active", label:"Active"},
+    draft:  {cls:"sp-draft",  dot:"dot-draft",  label:"Draft"},
+    paused: {cls:"sp-paused", dot:"dot-paused", label:"Paused"},
+    error:  {cls:"sp-error",  dot:"dot-error",  label:"Error"}
+  };
+  return map[s] || map.draft;
+}
+
+// ─── RENDER AGENT LIST ────────────────────────────────────────────────────────
+function renderAgentList() {
+  var container = document.getElementById("agent-list");
+  while (container.firstChild) container.removeChild(container.firstChild);
+
+  AGENTS.forEach(function(a) {
+    var m   = statusMeta(a.status);
+    var card = el("div", "agent-card" + (a.status==="active"?" active-agent":"") + (selectedAgentId===a.id?" selected":""));
+    card.dataset.agentId = a.id;
+
+    // top row
+    var top = el("div","ac-top");
+    var nameWrap = el("div");
+    txt(el("div","ac-name"), a.name).then ? null : nameWrap.appendChild(txt(el("div","ac-name"), a.name));
+    txt(el("div","ac-template"), a.template).then ? null : nameWrap.appendChild(txt(el("div","ac-template"), a.template));
+    // fix: use imperative
+    var acName = el("div","ac-name"); acName.textContent = a.name;
+    var acTpl  = el("div","ac-template"); acTpl.textContent = a.template + " template";
+    nameWrap.appendChild(acName); nameWrap.appendChild(acTpl);
+    top.appendChild(nameWrap);
+
+    var pill = el("span","status-pill"); pill.classList.add(m.cls);
+    var dot  = el("span","status-dot"); dot.classList.add(m.dot);
+    pill.appendChild(dot);
+    pill.appendChild(document.createTextNode(" " + m.label));
+    top.appendChild(pill);
+    card.appendChild(top);
+
+    // stats
+    var stats = el("div","ac-stats");
+    var s1 = el("div","ac-stat"); s1.innerHTML = ""; 
+    var s1strong = el("strong"); s1strong.textContent = a.callsToday; 
+    s1.appendChild(s1strong); s1.appendChild(document.createTextNode(" calls today"));
+    var s2 = el("div","ac-stat");
+    var s2strong = el("strong"); s2strong.textContent = a.avgDur;
+    s2.appendChild(s2strong); s2.appendChild(document.createTextNode(" avg"));
+    var s3 = el("div","ac-stat");
+    var s3strong = el("strong"); s3strong.textContent = a.captureRate;
+    s3.appendChild(s3strong); s3.appendChild(document.createTextNode(" capture"));
+    stats.appendChild(s1); stats.appendChild(s2); stats.appendChild(s3);
+    card.appendChild(stats);
+
+    // actions
+    var actions = el("div","ac-actions");
+    if (a.status !== "active") {
+      var actBtn = el("button","ac-btn activate"); actBtn.textContent = "Activate";
+      actBtn.dataset.agentId = a.id;
+      actBtn.addEventListener("click", function(e) { e.stopPropagation(); openActivateModal(parseInt(this.dataset.agentId,10)); });
+      actions.appendChild(actBtn);
+    }
+    var testBtn = el("button","ac-btn test"); testBtn.textContent = "Test Call";
+    testBtn.addEventListener("click", function(e) { e.stopPropagation(); showToast("📞 Initiating test call to your mobile…"); });
+    actions.appendChild(testBtn);
+    if (a.status === "draft") {
+      var delBtn = el("button","ac-btn danger"); delBtn.textContent = "Delete";
+      delBtn.dataset.agentId = a.id;
+      delBtn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        var aid = parseInt(this.dataset.agentId,10);
+        AGENTS = AGENTS.filter(function(x){return x.id!==aid;});
+        if (selectedAgentId===aid) selectedAgentId = AGENTS[0]?AGENTS[0].id:null;
+        renderAgentList();
+        if (selectedAgentId) renderConfigPanel();
+        showToast("Agent deleted");
+      });
+      actions.appendChild(delBtn);
+    }
+    card.appendChild(actions);
+
+    card.addEventListener("click", function() {
+      selectedAgentId = parseInt(this.dataset.agentId,10);
+      selectedTab = "general";
+      renderAgentList();
+      renderConfigPanel();
+    });
+
+    container.appendChild(card);
+  });
+}
+
+// ─── STATUS BAR ───────────────────────────────────────────────────────────────
+function renderStatusBar(a) {
+  var bar = document.getElementById("status-bar");
+  while (bar.firstChild) bar.removeChild(bar.firstChild);
+
+  var m = statusMeta(a.status);
+
+  var item1 = el("div","asb-item");
+  if (a.status==="active") {
+    var ld = el("span","live-dot"); item1.appendChild(ld);
+  }
+  var lbl1 = el("span","asb-label"); lbl1.textContent = "Status: ";
+  var val1 = el("span","asb-val"); val1.textContent = m.label;
+  item1.appendChild(lbl1); item1.appendChild(val1);
+  bar.appendChild(item1);
+
+  function asbItem(label, val) {
+    var i = el("div","asb-item");
+    var l = el("span","asb-label"); l.textContent = label;
+    var v = el("span","asb-val"); v.textContent = val;
+    i.appendChild(l); i.appendChild(v);
+    bar.appendChild(i);
+  }
+  asbItem("Model: ", a.model);
+  asbItem("Voice: ", a.voice);
+  asbItem("Calls today: ", String(a.callsToday));
+  asbItem("Capture rate: ", a.captureRate);
+}
+
+// ─── CONFIG TABS ──────────────────────────────────────────────────────────────
+var TABS = [
+  {id:"general",     label:"General"},
+  {id:"model",       label:"Model"},
+  {id:"voice",       label:"Voice"},
+  {id:"transcriber", label:"Transcriber"},
+  {id:"tools",       label:"Tools"},
+  {id:"prompts",     label:"Prompts"},
+  {id:"test",        label:"Test"}
+];
+
+function renderConfigTabs() {
+  var header = document.getElementById("cp-header");
+  while (header.firstChild) header.removeChild(header.firstChild);
+  TABS.forEach(function(t) {
+    var tab = el("div","cp-tab" + (selectedTab===t.id?" active":""));
+    tab.textContent = t.label;
+    tab.dataset.tab = t.id;
+    tab.addEventListener("click", function() {
+      selectedTab = this.dataset.tab;
+      renderConfigTabs();
+      renderConfigBody(getAgent(selectedAgentId));
+    });
+    header.appendChild(tab);
+  });
+}
+
+// ─── CONFIG PANEL ─────────────────────────────────────────────────────────────
+function renderConfigPanel() {
+  var a = getAgent(selectedAgentId);
+  if (!a) return;
+  renderStatusBar(a);
+  renderConfigTabs();
+  renderConfigBody(a);
+}
+
+function renderConfigBody(a) {
+  var body = document.getElementById("cp-body");
+  while (body.firstChild) body.removeChild(body.firstChild);
+
+  if (selectedTab === "general")     renderGeneral(a, body);
+  else if (selectedTab === "model")       renderModel(a, body);
+  else if (selectedTab === "voice")       renderVoice(a, body);
+  else if (selectedTab === "transcriber") renderTranscriber(a, body);
+  else if (selectedTab === "tools")       renderTools(a, body);
+  else if (selectedTab === "prompts")     renderPrompts(a, body);
+  else if (selectedTab === "test")        renderTest(a, body);
+}
+
+// ── General ──────────────────────────────────────────────────────────────────
+function renderGeneral(a, body) {
+  var sec = section("General Settings", "⚙");
+  var grid = el("div","cfg-grid"); grid.style.gridTemplateColumns = "1fr 1fr";
+
+  grid.appendChild(field("Agent Name", input("text", a.name)));
+  grid.appendChild(field("Template", selectEl([a.template,"Casual Dining","Fine Dining","General Purpose"])));
+  grid.appendChild(field("Assigned Outlet", input("text", "Rossa — Main Street")));
+  grid.appendChild(field("Language", selectEl(["English (US)","English (Indian)","Multi-language"])));
+
+  sec.appendChild(grid);
+  body.appendChild(sec);
+
+  var sec2 = section("Fallback & Transfer", "📞");
+  var grid2 = el("div","cfg-grid");
+  grid2.appendChild(field("Fallback Number", input("tel", "+1 (212) 555-0100")));
+  grid2.appendChild(field("Transfer Trigger", selectEl(["On escalation keyword","After 3 failures","Manual only"])));
+  sec2.appendChild(grid2);
+  body.appendChild(sec2);
+}
+
+// ── Model ─────────────────────────────────────────────────────────────────────
+function renderModel(a, body) {
+  var sec = section("Language Model", "🧠");
+
+  var note = el("div"); note.style.cssText = "background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;padding:12px 16px;font-size:13px;color:#888;margin-bottom:18px;line-height:1.5";
+  note.textContent = "The model powers how your agent understands callers and generates responses. Higher quality models cost more per minute but handle complex requests better.";
+  sec.appendChild(note);
+
+  var grid = el("div","cfg-grid"); grid.style.gridTemplateColumns = "1fr 1fr";
+  MODELS.forEach(function(m) {
+    var card = el("div","model-card");
+    var modelNameMap = {"GPT-4o":"gpt4o","Claude Sonnet 4.6":"claude","Llama 4 Maverick":"llama","Gemini Flash":"gemini"};
+    if (modelNameMap[a.model]===m.id) card.classList.add("selected");
+    var name = el("div","mc-name"); name.textContent = m.name;
+    var sub  = el("div","mc-sub"); sub.textContent = m.provider;
+    var badges = el("div","mc-badges");
+    [m.lat, m.cost, m.quality].forEach(function(b){
+      var chip = el("span","mc-badge"); chip.textContent = b; badges.appendChild(chip);
+    });
+    card.appendChild(name); card.appendChild(sub); card.appendChild(badges);
+    card.addEventListener("click", function() {
+      AGENTS.forEach(function(ag){ if(ag.id===selectedAgentId){ ag.model=m.name; }});
+      renderModel(getAgent(selectedAgentId), body);
+      renderStatusBar(getAgent(selectedAgentId));
+    });
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+
+  var sec2 = section("Parameters", "🎛");
+  var grid2 = el("div","cfg-grid");
+  grid2.appendChild(field("Temperature", input("number","0.4", "0","1","0.1")));
+  grid2.appendChild(field("Max Tokens", input("number","600","100","2000","100")));
+  sec2.appendChild(grid2);
+
+  body.appendChild(sec); body.appendChild(sec2);
+}
+
+// ── Voice ─────────────────────────────────────────────────────────────────────
+function renderVoice(a, body) {
+  var sec = section("Voice Selection", "🎙");
+
+  var note = el("div"); note.style.cssText = "background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;padding:12px 16px;font-size:13px;color:#888;margin-bottom:18px;line-height:1.5";
+  note.textContent = "Click the play button on any voice to hear a 10-second preview. Your callers will hear this voice on every call.";
+  sec.appendChild(note);
+
+  var filterRow = el("div"); filterRow.style.cssText = "display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap";
+  ["All","Female","Male","ElevenLabs","PlayHT","OpenAI"].forEach(function(f) {
+    var chip = el("button"); chip.style.cssText = "font-size:11px;font-weight:700;padding:5px 12px;border-radius:7px;border:2px solid #e0ddd5;background:#fff;color:#888;cursor:pointer;font-family:Inter,sans-serif";
+    chip.textContent = f;
+    chip.addEventListener("click", function() { showToast("Filter: " + f); });
+    filterRow.appendChild(chip);
+  });
+  sec.appendChild(filterRow);
+
+  var grid = el("div","voice-grid");
+  VOICES.forEach(function(v) {
+    var card = el("div","voice-card");
+    if (a.voice===v.name) card.classList.add("selected");
+
+    var top = el("div","vc-top");
+    var info = el("div");
+    var vname = el("div","vc-name"); vname.textContent = v.name;
+    var vsub  = el("div","vc-sub"); vsub.textContent = v.provider + " · " + v.gender;
+    info.appendChild(vname); info.appendChild(vsub);
+    var playBtn = el("button","vc-play"); playBtn.textContent = "▶";
+    playBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      showToast("🔊 Playing " + v.name + " preview…");
+    });
+    top.appendChild(info); top.appendChild(playBtn);
+    card.appendChild(top);
+
+    var tags = el("div","vc-tags");
+    v.tags.forEach(function(t){ var tag = el("span","vc-tag"); tag.textContent = t; tags.appendChild(tag); });
+    card.appendChild(tags);
+
+    card.addEventListener("click", function() {
+      AGENTS.forEach(function(ag){ if(ag.id===selectedAgentId){ ag.voice=v.name; }});
+      renderVoice(getAgent(selectedAgentId), body);
+      renderStatusBar(getAgent(selectedAgentId));
+    });
+    grid.appendChild(card);
+  });
+  sec.appendChild(grid);
+  body.appendChild(sec);
+}
+
+// ── Transcriber ──────────────────────────────────────────────────────────────
+function renderTranscriber(a, body) {
+  var sec = section("Speech-to-Text", "📝");
+  var grid = el("div","cfg-grid");
+  grid.appendChild(field("Provider", selectEl(["Deepgram","AssemblyAI","Azure","OpenAI"])));
+  grid.appendChild(field("Model", selectEl(["Nova 3 (recommended)","Nova 2","Whisper Large"])));
+  grid.appendChild(field("Language", selectEl(["English (US)","Indian English","Multi-language"])));
+  grid.appendChild(field("Accuracy vs Speed", selectEl(["Balanced","Accuracy priority","Speed priority"])));
+  sec.appendChild(grid);
+  body.appendChild(sec);
+
+  var sec2 = section("Recommended Configurations", "⭐");
+  var recs = [
+    {name:"Indian English callers", provider:"Deepgram Nova 3", lang:"Indian English"},
+    {name:"Fast end-of-turn detection", provider:"Deepgram Nova 2", lang:"English (US)"},
+    {name:"Multi-language support", provider:"AssemblyAI Universal", lang:"Multi-language"}
+  ];
+  recs.forEach(function(r) {
+    var row = el("div"); row.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:2px solid #f0ede8";
+    var info = el("div");
+    var rname = el("div"); rname.style.cssText = "font-size:14px;font-weight:700;color:var(--black)"; rname.textContent = r.name;
+    var rsub  = el("div"); rsub.style.cssText = "font-size:12px;color:#aaa;margin-top:2px"; rsub.textContent = r.provider + " · " + r.lang;
+    info.appendChild(rname); info.appendChild(rsub);
+    var applyBtn = el("button","btn btn-ghost"); applyBtn.style.cssText = "font-size:12px;padding:6px 14px";
+    applyBtn.textContent = "Apply";
+    applyBtn.addEventListener("click", function() { showToast("Applied: " + r.name); });
+    row.appendChild(info); row.appendChild(applyBtn);
+    sec2.appendChild(row);
+  });
+  body.appendChild(sec2);
+}
+
+// ── Tools ────────────────────────────────────────────────────────────────────
+function renderTools(a, body) {
+  var sec = section("Tool Configuration", "🔧");
+  var note = el("div"); note.style.cssText = "background:#f9f8f5;border:2px solid #e8e5de;border-radius:10px;padding:12px 16px;font-size:13px;color:#888;margin-bottom:18px;line-height:1.5";
+  note.textContent = "Control exactly what actions your agent can take on each call. Disabling a tool does not remove it — it just prevents the agent from invoking it.";
+  sec.appendChild(note);
+
+  TOOL_DEFS.forEach(function(t) {
+    var row = el("div","tool-row");
+    var info = el("div","tool-info");
+    var tname = el("div","tool-name"); tname.textContent = t.name;
+    var tdesc = el("div","tool-desc"); tdesc.textContent = t.desc;
+    info.appendChild(tname); info.appendChild(tdesc);
+
+    var tog = el("label","toggle");
+    var inp = el("input"); inp.type = "checkbox"; if(a.tools[t.id]) inp.checked = true;
+    inp.dataset.toolId = t.id;
+    inp.addEventListener("change", function() {
+      var ag = getAgent(selectedAgentId);
+      if (ag) ag.tools[this.dataset.toolId] = this.checked;
+      showToast((this.checked ? "Enabled: " : "Disabled: ") + t.name);
+    });
+    var track = el("div","tog-track"); track.addEventListener("click", function(){ inp.click(); });
+    var thumb = el("div","tog-thumb");
+    tog.appendChild(inp); tog.appendChild(track); tog.appendChild(thumb);
+
+    row.appendChild(info); row.appendChild(tog);
+    sec.appendChild(row);
+  });
+
+  body.appendChild(sec);
+
+  // Transfer config
+  var sec2 = section("Transfer Call Settings", "↗");
+  var grid2 = el("div","cfg-grid");
+  grid2.appendChild(field("Transfer Destination", input("tel","+1 (212) 555-0100")));
+  grid2.appendChild(field("Trigger After N Failures", selectEl(["1","2","3 (recommended)","4","5"])));
+  sec2.appendChild(grid2);
+  body.appendChild(sec2);
+}
+
+// ── Prompts ──────────────────────────────────────────────────────────────────
+function renderPrompts(a, body) {
+  var sec = section("System Prompt", "📄");
+
+  var warn = el("div"); warn.style.cssText = "background:#fff8e0;border:2px solid #f0c84a;border-radius:10px;padding:12px 16px;font-size:13px;color:#7a5a00;margin-bottom:14px;line-height:1.5";
+  warn.textContent = "Variables in blue are auto-injected from your Table Config and Brand Profile. Removing them may break capacity validation.";
+  sec.appendChild(warn);
+
+  var varRow = el("div","variable-chips");
+  VARIABLES.forEach(function(v) {
+    var chip = el("span","var-chip"); chip.textContent = v;
+    chip.addEventListener("click", function() { showToast("Variable " + v + " copied"); });
+    varRow.appendChild(chip);
+  });
+  sec.appendChild(varRow);
+
+  var ta = el("textarea","prompt-editor");
+  ta.value = a.prompt; ta.rows = 10;
+  ta.addEventListener("change", function() {
+    var ag = getAgent(selectedAgentId); if(ag) ag.prompt = this.value;
+  });
+  sec.appendChild(ta);
+
+  var resetBtn = el("button","btn btn-ghost"); resetBtn.style.marginTop = "10px"; resetBtn.textContent = "↺ Restore Default Prompt";
+  resetBtn.addEventListener("click", function() { ta.value = a.prompt; showToast("Prompt restored to default"); });
+  sec.appendChild(resetBtn);
+  body.appendChild(sec);
+
+  var sec2 = section("Greeting & Closing", "👋");
+  var grid2 = el("div","cfg-grid"); grid2.style.gridTemplateColumns = "1fr";
+  grid2.appendChild(field("First Message (Greeting)", textarea(a.firstMsg, 2)));
+  grid2.appendChild(field("End-of-Call Message", textarea(a.endMsg, 2)));
+  sec2.appendChild(grid2);
+  body.appendChild(sec2);
+}
+
+// ── Test ─────────────────────────────────────────────────────────────────────
+function renderTest(a, body) {
+  var tp = el("div","test-panel");
+  var tt = el("div","test-title"); tt.textContent = "Test Your Agent";
+  var ts = el("div","test-sub"); ts.textContent = "Initiate a real call to your mobile. You will hear exactly what your callers hear using the current configuration. Test calls are flagged [TEST] in your call log.";
+  tp.appendChild(tt); tp.appendChild(ts);
+
+  var row = el("div","test-phone-row");
+  var inp = el("input","test-phone-input"); inp.type = "tel"; inp.placeholder = "Your mobile number…"; inp.value = "+1 (212) 555-0000";
+  var callBtn = el("button","test-call-btn");
+  callBtn.appendChild(document.createTextNode("📞 Call Me Now"));
+  callBtn.addEventListener("click", function() { showToast("📞 Test call initiated to " + inp.value + "…"); });
+  row.appendChild(inp); row.appendChild(callBtn);
+  tp.appendChild(row);
+  body.appendChild(tp);
+
+  // Simulator
+  var sec = section("Text Simulator", "💬");
+  var simNote = el("div"); simNote.style.cssText = "font-size:13px;color:#aaa;margin-bottom:14px;line-height:1.5";
+  simNote.textContent = "Type as a caller to test edge cases without using your phone. Agent responses are illustrative in demo mode.";
+  sec.appendChild(simNote);
+
+  var simChat = el("div"); simChat.style.cssText = "background:#f9f8f5;border:2px solid #e8e5de;border-radius:12px;padding:14px;min-height:160px;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;font-size:13px;color:#aaa;justify-content:center;align-items:center";
+  var ph = el("div"); ph.textContent = "Conversation will appear here…"; simChat.appendChild(ph);
+  sec.appendChild(simChat);
+
+  var simRow = el("div"); simRow.style.cssText = "display:flex;gap:10px";
+  var simInput = el("input","cfg-input"); simInput.placeholder = "Type as a caller, e.g. 'I want a table for 4 on Friday'…";
+  var simBtn = el("button","btn btn-primary"); simBtn.textContent = "Send";
+  simBtn.addEventListener("click", function() {
+    if (!simInput.value.trim()) return;
+    while(simChat.firstChild) simChat.removeChild(simChat.firstChild);
+    simChat.style.justifyContent = "flex-start"; simChat.style.alignItems = "stretch"; simChat.style.color = "var(--black)";
+    var userBubble = el("div"); userBubble.style.cssText = "background:var(--black);color:#fff;padding:10px 14px;border-radius:12px 12px 3px 12px;font-size:13px;align-self:flex-end;max-width:78%";
+    userBubble.textContent = simInput.value;
+    var agentBubble = el("div"); agentBubble.style.cssText = "background:#fff;border:2px solid #e8e5de;padding:10px 14px;border-radius:12px 12px 12px 3px;font-size:13px;max-width:78%";
+    agentBubble.textContent = "Hi there! You've reached " + a.name.split(" — ")[0] + ". I can take a reservation or answer questions. How can I help?";
+    simChat.appendChild(userBubble); simChat.appendChild(agentBubble);
+    simInput.value = "";
+  });
+  simRow.appendChild(simInput); simRow.appendChild(simBtn);
+  sec.appendChild(simRow);
+  body.appendChild(sec);
+}
+
+// ─── DOM BUILDER HELPERS ──────────────────────────────────────────────────────
+function section(title, icon) {
+  var s = el("div","cfg-section");
+  var h = el("div","cfg-section-title");
+  var ic = el("span","cfg-section-icon"); ic.textContent = icon;
+  h.appendChild(ic); h.appendChild(document.createTextNode(" " + title));
+  s.appendChild(h);
+  return s;
+}
+function field(label, control) {
+  var f = el("div","cfg-field");
+  var l = el("label","cfg-label"); l.textContent = label;
+  f.appendChild(l); f.appendChild(control);
+  return f;
+}
+function input(type, val, min, max, step) {
+  var i = el("input","cfg-input"); i.type = type; i.value = val || "";
+  if (min !== undefined) i.min = min;
+  if (max !== undefined) i.max = max;
+  if (step !== undefined) i.step = step;
+  return i;
+}
+function selectEl(opts) {
+  var s = el("select","cfg-select");
+  opts.forEach(function(o) {
+    var op = el("option"); op.value = o; op.textContent = o; s.appendChild(op);
+  });
+  return s;
+}
+function textarea(val, rows) {
+  var t = el("textarea","cfg-textarea"); t.value = val || ""; t.rows = rows || 3;
+  return t;
+}
+
+// ─── ACTIVATE MODAL ───────────────────────────────────────────────────────────
+function openActivateModal(id) {
+  pendingActivate = id;
+  var a = getAgent(id);
+  var active = AGENTS.filter(function(x){return x.status==="active";})[0];
+  var txt2 = document.getElementById("modal-act-text");
+  if (active) {
+    txt2.textContent = "Activating \"" + a.name + "\" will deactivate \"" + active.name + "\". Calls will switch to the new agent immediately.";
+  } else {
+    txt2.textContent = "Activating \"" + a.name + "\". This agent will start handling calls immediately.";
+  }
+  document.getElementById("modal-activate").classList.add("open");
+}
+
+document.getElementById("modal-act-confirm").addEventListener("click", function() {
+  if (!pendingActivate) return;
+  AGENTS.forEach(function(a) { a.status = (a.id===pendingActivate ? "active" : (a.status==="active"?"paused":a.status)); });
+  document.getElementById("modal-activate").classList.remove("open");
+  renderAgentList();
+  renderConfigPanel();
+  showToast("Agent activated — now handling calls");
+  pendingActivate = null;
+});
+
+document.getElementById("modal-act-cancel").addEventListener("click", function() { document.getElementById("modal-activate").classList.remove("open"); });
+document.getElementById("modal-act-close").addEventListener("click",  function() { document.getElementById("modal-activate").classList.remove("open"); });
+
+// ─── NEW AGENT MODAL ──────────────────────────────────────────────────────────
+function renderTemplateGrid() {
+  var grid = document.getElementById("tpl-grid");
+  while (grid.firstChild) grid.removeChild(grid.firstChild);
+  TEMPLATES.forEach(function(t) {
+    var card = el("div","tpl-card" + (selectedTplId===t.id?" selected":""));
+    card.dataset.tplId = t.id;
+    if (t.popular) { var badge = el("span","tpl-badge"); badge.textContent = "Popular"; card.appendChild(badge); }
+    var icon = el("div","tpl-icon"); icon.textContent = t.icon;
+    var name = el("div","tpl-name"); name.textContent = t.name;
+    var desc = el("div","tpl-desc"); desc.textContent = t.desc;
+    card.appendChild(icon); card.appendChild(name); card.appendChild(desc);
+    card.addEventListener("click", function() {
+      selectedTplId = this.dataset.tplId;
+      var ag = TEMPLATES.filter(function(x){return x.id===selectedTplId;})[0];
+      document.getElementById("new-agent-name").value = ag ? ag.name + " Agent" : "";
+      renderTemplateGrid();
+    });
+    grid.appendChild(card);
+  });
+}
+
+document.getElementById("btn-new-agent").addEventListener("click", function() {
+  renderTemplateGrid();
+  document.getElementById("new-agent-name").value = "Casual Dining Agent";
+  document.getElementById("modal-new").classList.add("open");
+});
+document.getElementById("modal-new-close").addEventListener("click",  function() { document.getElementById("modal-new").classList.remove("open"); });
+document.getElementById("modal-new-cancel").addEventListener("click", function() { document.getElementById("modal-new").classList.remove("open"); });
+document.getElementById("modal-new-create").addEventListener("click", function() {
+  var name = document.getElementById("new-agent-name").value.trim() || "New Agent";
+  var tpl  = TEMPLATES.filter(function(t){return t.id===selectedTplId;})[0];
+  var newId = Date.now();
+  AGENTS.push({
+    id:newId, name:name, template:tpl?tpl.name:"General Purpose", status:"draft",
+    model:"GPT-4o", voice:"Aria", transcriber:"Deepgram Nova 3",
+    callsToday:0, avgDur:"—", captureRate:"—",
+    tools:{create_reservation:true,answer_faq:true,transfer_call:true,check_availability:false},
+    prompt:"You are an AI assistant for {{restaurant_name}}.\n\nBusiness hours: {{business_hours}}\nFallback: {{fallback_number}}",
+    firstMsg:"Hi, you've reached {{restaurant_name}}. How can I help?",
+    endMsg:"Thank you for calling. Have a great day!"
+  });
+  selectedAgentId = newId;
+  selectedTab = "general";
+  document.getElementById("modal-new").classList.remove("open");
+  renderAgentList();
+  renderConfigPanel();
+  showToast("Agent created — configure it before activating");
+});
+
+// close modals on backdrop click
+document.getElementById("modal-new").addEventListener("click", function(e) { if(e.target===this) this.classList.remove("open"); });
+document.getElementById("modal-activate").addEventListener("click", function(e) { if(e.target===this) this.classList.remove("open"); });
+
+// nav clicks
+document.querySelectorAll(".nav-item").forEach(function(item) {
+  item.addEventListener("click", function() {
+    document.querySelectorAll(".nav-item").forEach(function(n){n.classList.remove("active");});
+    item.classList.add("active");
+  });
+});
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+  var wrap = document.getElementById("toast-wrap");
+  var t = el("div","toast");
+  var ic = el("span"); ic.textContent = "✓"; ic.style.color = "var(--teal)";
+  var txt = el("span"); txt.textContent = " " + msg;
+  t.appendChild(ic); t.appendChild(txt);
+  wrap.appendChild(t);
+  setTimeout(function(){
+    t.style.cssText += ";opacity:0;transform:translateX(20px);transition:all .3s";
+    setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 300);
+  }, 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderAgentList();
+renderConfigPanel();
+</script>
+</body>
+</html>
