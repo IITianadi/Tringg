@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tringg — Reservations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black:    #0a0a0a;
+  --white:    #ffffff;
+  --bg:       #f0ede8;
+  --teal:     #7FE8D8;
+  --yellow:   #F5E642;
+  --salmon:   #F0A090;
+  --card-r:   18px;
+  --border:   2px solid #0a0a0a;
+  --shadow:   4px 4px 0 #0a0a0a;
+  --shadow-lg:6px 6px 0 #0a0a0a;
+  --nav-w:    240px;
+}
+
+html, body { height: 100%; background: var(--bg); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+
+/* ── SHELL ── */
+.shell { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── NAV ── */
+.nav {
+  width: var(--nav-w); flex-shrink: 0; background: var(--black);
+  display: flex; flex-direction: column; padding: 28px 0;
+  height: 100vh; overflow-y: auto;
+}
+.nav-logo { padding: 0 22px 26px; border-bottom: 1px solid #1e1e1e; display: flex; align-items: center; gap: 10px; }
+.logo-box { width: 36px; height: 36px; background: var(--yellow); border-radius: 9px; border: 2px solid var(--black); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.logo-box svg { width: 20px; height: 20px; }
+.logo-word { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: -.4px; }
+
+.nav-sec { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #3a3a3a; padding: 18px 22px 8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 22px; cursor: pointer; color: #555;
+  font-size: 14px; font-weight: 500; transition: all .18s;
+  border-left: 3px solid transparent; user-select: none;
+}
+.nav-item:hover { color: var(--white); background: #111; }
+.nav-item.active { color: var(--white); background: #141414; border-left-color: var(--yellow); }
+.nav-item .ic { font-size: 15px; width: 18px; text-align: center; }
+.nav-badge {
+  margin-left: auto; font-size: 10px; font-weight: 800;
+  min-width: 20px; height: 20px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; padding: 0 6px;
+}
+.nb-red    { background: #e55; color: #fff; }
+.nb-yellow { background: var(--yellow); color: var(--black); }
+
+.nav-outlet {
+  margin-top: auto; padding: 16px 22px 0; border-top: 1px solid #1a1a1a;
+}
+.outlet-lbl { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #3a3a3a; margin-bottom: 8px; }
+.outlet-sel {
+  width: 100%; background: #111; border: 1px solid #2a2a2a; border-radius: 9px;
+  color: var(--white); font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+  padding: 9px 12px; appearance: none; outline: none; cursor: pointer;
+}
+.outlet-sel:focus { border-color: var(--yellow); }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* topbar */
+.topbar {
+  background: var(--white); border-bottom: 2px solid #e5e2db;
+  padding: 0 32px; height: 64px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: var(--black); letter-spacing: -.3px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.tb-btn {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 13px; font-weight: 700; padding: 9px 16px;
+  border-radius: 10px; border: var(--border); cursor: pointer;
+  transition: all .18s; font-family: 'Inter', sans-serif;
+}
+.tb-btn.primary { background: var(--black); color: var(--white); box-shadow: var(--shadow); }
+.tb-btn.primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.tb-btn.ghost { background: var(--white); color: var(--black); }
+.tb-btn.ghost:hover { background: #f5f2ec; }
+.tb-btn.teal { background: var(--teal); color: var(--black); box-shadow: var(--shadow); }
+.tb-btn.teal:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.notif-btn { position: relative; width: 38px; height: 38px; border-radius: 9px; background: #f9f8f5; border: 2px solid #e0ddd5; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 15px; }
+.n-dot { position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; background: #e55; border-radius: 50%; border: 2px solid var(--white); }
+.avatar { width: 38px; height: 38px; border-radius: 9px; background: var(--black); border: 2px solid var(--black); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: var(--yellow); cursor: pointer; }
+
+/* ── CONTENT AREA ── */
+.content-area {
+  flex: 1; display: flex; overflow: hidden; position: relative;
+}
+
+/* ── TABLE SECTION ── */
+.table-section {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  transition: width .3s ease;
+}
+
+/* tabs + search bar */
+.controls {
+  background: var(--white); border-bottom: 2px solid #e5e2db;
+  padding: 0 32px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  height: 54px;
+}
+.tabs { display: flex; gap: 0; height: 100%; }
+.tab {
+  padding: 0 18px; font-size: 13px; font-weight: 600; cursor: pointer;
+  color: #999; border-bottom: 3px solid transparent;
+  display: flex; align-items: center; gap: 8px; transition: all .18s;
+  white-space: nowrap;
+}
+.tab:hover { color: var(--black); }
+.tab.active { color: var(--black); border-bottom-color: var(--black); }
+.tab-count {
+  font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 6px;
+  border: 2px solid;
+}
+.tab.active .tab-count { background: var(--black); border-color: var(--black); color: var(--white); }
+.tab:not(.active) .tab-count { background: #f5f2ec; border-color: #ddd; color: #888; }
+.tab-count.red { background: #e55 !important; border-color: #e55 !important; color: #fff !important; }
+
+.controls-right { display: flex; align-items: center; gap: 10px; }
+.search-wrap { position: relative; }
+.search-wrap input {
+  background: #f9f8f5; border: 2px solid #e0ddd5; border-radius: 9px;
+  padding: 8px 14px 8px 34px; font-size: 13px; font-family: 'Inter', sans-serif;
+  color: var(--black); outline: none; width: 220px; transition: border-color .2s;
+}
+.search-wrap input:focus { border-color: var(--black); }
+.search-wrap input::placeholder { color: #bbb; }
+.search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 13px; color: #bbb; pointer-events: none; }
+.sort-btn { font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 9px; border: 2px solid #e0ddd5; background: var(--white); color: #888; cursor: pointer; white-space: nowrap; }
+.sort-btn:hover { border-color: var(--black); color: var(--black); }
+
+/* table */
+.table-scroll { flex: 1; overflow-y: auto; }
+.resv-table { width: 100%; border-collapse: collapse; }
+.resv-table thead th {
+  background: #f9f8f5; padding: 12px 16px; text-align: left;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: #aaa; border-bottom: 2px solid #e5e2db; position: sticky; top: 0; z-index: 2;
+  white-space: nowrap;
+}
+.resv-table thead th:first-child { padding-left: 32px; }
+.resv-table thead th:last-child { padding-right: 32px; }
+.resv-table tbody tr {
+  border-bottom: 2px solid #f0ede8; cursor: pointer;
+  transition: background .14s;
+}
+.resv-table tbody tr:hover { background: #faf9f6; }
+.resv-table tbody tr.selected { background: #fffef0; }
+.resv-table tbody tr.selected td:first-child { border-left: 3px solid var(--yellow); }
+.resv-table tbody td { padding: 14px 16px; vertical-align: middle; }
+.resv-table tbody td:first-child { padding-left: 32px; }
+.resv-table tbody td:last-child { padding-right: 32px; }
+
+/* status badges */
+.badge {
+  font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 7px; border: 2px solid; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px;
+}
+.b-pending   { background: #fff8e0; border-color: #f0c84a; color: #7a5a00; }
+.b-confirmed { background: #e6f9ee; border-color: #a0dbb5; color: #1a6e3a; }
+.b-cancelled { background: #f5f5f5; border-color: #ddd;    color: #888; }
+.b-expired   { background: #fee5e5; border-color: #f9aaaa; color: #c00; }
+.b-manual    { background: #e8f0fe; border-color: #a8c4f8; color: #1a50a0; }
+
+/* timer */
+.timer {
+  font-family: 'Space Grotesk', monospace; font-size: 14px; font-weight: 700;
+  padding: 4px 10px; border-radius: 7px; border: 2px solid; display: inline-block;
+}
+.timer.ok     { background: #fff8e0; border-color: #f0c84a; color: #7a5a00; }
+.timer.warn   { background: #ffe8d5; border-color: #f0a050; color: #8a3a00; }
+.timer.urgent { background: #fee5e5; border-color: #f9aaaa; color: #c00; animation: blink .9s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.6} }
+
+/* guest cell */
+.guest-name { font-size: 14px; font-weight: 700; color: var(--black); }
+.guest-detail { font-size: 12px; color: #999; margin-top: 2px; }
+.returning-flag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; background: var(--teal);
+  border: 1px solid var(--black); border-radius: 5px; padding: 1px 7px;
+  color: var(--black); margin-left: 6px; vertical-align: middle;
+}
+.source-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px;
+  border: 1px solid #ddd; background: #f5f2ec; color: #888; display: inline-block;
+}
+.source-badge.voice { background: #f0e8ff; border-color: #c8a0f0; color: #6030a0; }
+
+/* row actions */
+.row-actions { display: flex; gap: 6px; }
+.act {
+  font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 7px;
+  border: 2px solid var(--black); cursor: pointer; transition: all .14s;
+  font-family: 'Inter', sans-serif; white-space: nowrap;
+}
+.act-confirm { background: var(--teal); color: var(--black); }
+.act-confirm:hover { box-shadow: 2px 2px 0 var(--black); }
+.act-decline { background: var(--white); color: var(--black); }
+.act-decline:hover { background: #fee5e5; border-color: #f9aaaa; color: #c00; }
+.act-hold    { background: var(--white); color: #888; border-color: #ddd; }
+.act-hold:hover { background: #fff8e0; border-color: #f0c84a; color: #7a5a00; }
+
+/* empty state */
+.empty-state {
+  padding: 80px 32px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.empty-icon { font-size: 48px; margin-bottom: 4px; }
+.empty-title { font-size: 18px; font-weight: 800; color: var(--black); }
+.empty-sub { font-size: 14px; color: #aaa; }
+
+/* ── SLIDE-OVER PANEL ── */
+.slideover {
+  width: 0; flex-shrink: 0; background: var(--white);
+  border-left: 2px solid #e5e2db; overflow: hidden;
+  transition: width .28s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+}
+.slideover.open { width: 480px; }
+
+.so-header {
+  padding: 22px 28px 18px; border-bottom: 2px solid #f0ede8;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-shrink: 0;
+}
+.so-close {
+  width: 32px; height: 32px; border-radius: 8px; border: 2px solid #e0ddd5;
+  background: var(--white); cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; transition: all .15s; flex-shrink: 0;
+}
+.so-close:hover { border-color: var(--black); background: #f5f2ec; }
+.so-guest-name { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; color: var(--black); line-height: 1.1; }
+.so-meta { font-size: 13px; color: #999; margin-top: 5px; }
+
+.so-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+/* info grid */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+.info-cell {
+  background: #f9f8f5; border: 2px solid #e8e5de; border-radius: 12px; padding: 14px 16px;
+}
+.info-cell.full { grid-column: 1 / -1; }
+.info-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #bbb; margin-bottom: 5px; }
+.info-value { font-size: 14px; font-weight: 600; color: var(--black); }
+.info-value.large { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; }
+.info-value.mono { font-family: 'Space Grotesk', monospace; }
+.call-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; padding: 5px 12px;
+  border-radius: 7px; border: var(--border); background: var(--black); color: var(--white);
+  cursor: pointer; transition: all .15s; margin-top: 6px;
+}
+.call-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+/* special requests */
+.sr-box {
+  background: #fffef0; border: 2px solid #f0c84a; border-radius: 12px; padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.sr-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #c0a000; margin-bottom: 6px; }
+.sr-text { font-size: 13px; color: var(--black); line-height: 1.6; }
+
+/* transcript */
+.transcript-section { margin-bottom: 20px; }
+.section-hdr {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #bbb; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.section-hdr::after { content:''; flex:1; height:1px; background:#f0ede8; }
+
+.transcript { display: flex; flex-direction: column; gap: 10px; }
+.msg { display: flex; gap: 10px; align-items: flex-start; }
+.msg.agent { flex-direction: row; }
+.msg.caller { flex-direction: row-reverse; }
+.msg-bubble {
+  max-width: 78%; padding: 10px 14px; border-radius: 12px;
+  font-size: 13px; line-height: 1.5; border: 2px solid;
+}
+.msg.agent .msg-bubble { background: #f9f8f5; border-color: #e8e5de; color: var(--black); border-bottom-left-radius: 3px; }
+.msg.caller .msg-bubble { background: var(--black); border-color: var(--black); color: var(--white); border-bottom-right-radius: 3px; }
+.msg-who { font-size: 10px; font-weight: 700; color: #bbb; letter-spacing: .06em; text-transform: uppercase; margin-top: 4px; white-space: nowrap; }
+.msg-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; border: 2px solid; }
+.msg.agent .msg-avatar { background: var(--teal); border-color: var(--black); color: var(--black); }
+.msg.caller .msg-avatar { background: var(--black); border-color: var(--black); color: var(--yellow); }
+
+/* notes */
+.notes-area {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  border: 2px solid #e8e5de; background: #f9f8f5;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--black);
+  resize: none; outline: none; transition: border-color .2s; line-height: 1.5;
+}
+.notes-area:focus { border-color: var(--black); }
+.notes-area::placeholder { color: #ccc; }
+
+/* status timeline */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 14px; align-items: flex-start; padding: 8px 0; position: relative; }
+.tl-item:not(:last-child)::before {
+  content: ''; position: absolute; left: 11px; top: 28px; bottom: -8px;
+  width: 2px; background: #f0ede8;
+}
+.tl-dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+.tl-dot.done { background: var(--teal); border-color: var(--black); }
+.tl-dot.now  { background: var(--yellow); border-color: var(--black); }
+.tl-dot.wait { background: #f9f8f5; border-color: #ddd; }
+.tl-info { flex: 1; }
+.tl-label { font-size: 13px; font-weight: 600; color: var(--black); }
+.tl-time  { font-size: 11px; color: #bbb; margin-top: 2px; }
+
+/* SMS status */
+.sms-status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 7px; border: 2px solid; }
+.sms-ok      { background: #e6f9ee; border-color: #a0dbb5; color: #1a6e3a; }
+.sms-fail    { background: #fee5e5; border-color: #f9aaaa; color: #c00; }
+
+/* so action bar */
+.so-actions {
+  padding: 18px 28px; border-top: 2px solid #f0ede8;
+  display: flex; flex-direction: column; gap: 10px; flex-shrink: 0;
+  background: var(--white);
+}
+.so-action-row { display: flex; gap: 8px; }
+.so-btn {
+  flex: 1; padding: 13px; border-radius: 12px; border: var(--border);
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .18s; text-align: center;
+}
+.so-btn.confirm { background: var(--teal); color: var(--black); box-shadow: var(--shadow); }
+.so-btn.confirm:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+.so-btn.decline { background: var(--white); color: var(--black); }
+.so-btn.decline:hover { background: #fee5e5; }
+.so-btn.hold    { background: var(--white); color: #888; border-color: #ddd; }
+.so-btn.hold:hover { background: #fff8e0; border-color: #f0c84a; color: #7a5a00; }
+.so-btn.cancel  { background: #fee5e5; color: #c00; border-color: #f9aaaa; }
+.so-btn.cancel:hover { box-shadow: var(--shadow); }
+.so-btn.call    { background: var(--black); color: var(--white); }
+.so-btn.call:hover { box-shadow: var(--shadow); }
+
+/* ── MODAL (Log Missed Booking) ── */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(10,10,10,.55);
+  display: none; align-items: center; justify-content: center; z-index: 100;
+  backdrop-filter: blur(2px);
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--white); border: var(--border); border-radius: 20px;
+  box-shadow: var(--shadow-lg); width: 520px; max-width: 95vw;
+  max-height: 90vh; overflow-y: auto;
+  animation: slideUp .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.modal-header {
+  padding: 24px 28px 18px; border-bottom: 2px solid #f0ede8;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: var(--black); }
+.modal-body { padding: 24px 28px; }
+.modal-footer { padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end; border-top: 2px solid #f0ede8; }
+
+.mfield { margin-bottom: 18px; }
+.mfield label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--black); margin-bottom: 7px; }
+.mfield input, .mfield select, .mfield textarea {
+  width: 100%; padding: 11px 14px; background: #f9f8f5; border: 2px solid #e0ddd5; border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: 14px; color: var(--black); outline: none; transition: border-color .2s; appearance: none;
+}
+.mfield input:focus, .mfield select:focus, .mfield textarea:focus { border-color: var(--black); }
+.mfield-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sms-toggle { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #f9f8f5; border: 2px solid #e0ddd5; border-radius: 10px; cursor: pointer; }
+.sms-toggle-label { font-size: 13px; font-weight: 600; color: var(--black); flex: 1; }
+.sms-toggle-sub { font-size: 11px; color: #aaa; margin-top: 2px; }
+.toggle-sw { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+.toggle-sw input { opacity: 0; width: 0; height: 0; position: absolute; }
+.tsw-track { position: absolute; inset: 0; background: #ddd; border-radius: 11px; border: 2px solid #bbb; transition: all .2s; }
+.toggle-sw input:checked + .tsw-track { background: var(--teal); border-color: var(--black); }
+.tsw-thumb { position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; background: #fff; border-radius: 50%; transition: transform .2s; }
+.toggle-sw input:checked ~ .tsw-thumb { transform: translateX(18px); }
+
+/* ── TOAST ── */
+.toast-container { position: fixed; bottom: 28px; right: 28px; z-index: 200; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--black); color: var(--white); border: var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-lg); padding: 14px 18px;
+  font-size: 13px; font-weight: 600; min-width: 280px; pointer-events: all;
+  animation: toastIn .22s cubic-bezier(.4,0,.2,1);
+}
+@keyframes toastIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+.toast.success .t-ic { color: var(--teal); }
+.toast.warning .t-ic { color: var(--yellow); }
+.toast.error   .t-ic { color: var(--salmon); }
+.t-ic { font-size: 18px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #bbb; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ── NAV ── -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="logo-box">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 4C5.1 4 4 5.1 4 6.5v3C4 10.9 5.1 12 6.5 12H8v2.5a1 1 0 001.7.7l3.3-3.2H17.5c1.4 0 2.5-1.1 2.5-2.5v-3C20 5.1 18.9 4 17.5 4h-11z" fill="black"/></svg>
+      </div>
+      <span class="logo-word">Tringg</span>
+    </div>
+        <div class="nav-sec">Main</div>
+    <div class="nav-item" id="nav-overview" style="cursor:pointer" onclick="window.location='tringg_s1_s2.html'">⬡ Overview
+    </div>
+    <div class="nav-item active" id="nav-reservations" style="cursor:pointer" onclick="window.location='tringg_s3_reservations.html'">📋 Reservations
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" id="nav-calls" style="cursor:pointer" onclick="window.location='tringg_s4_calls.html'">📞 Calls
+    </div>
+    <div class="nav-item" id="nav-agents" style="cursor:pointer" onclick="window.location='tringg_s5_agents.html'">🤖 Agents
+    </div>
+    <div class="nav-sec">Config</div>
+    <div class="nav-item" id="nav-settings" style="cursor:pointer" onclick="window.location='tringg_s6_settings.html'">⚙ Settings</div>
+    <div class="nav-item" id="nav-messaging">💬 Messaging</div>
+    <div class="nav-item" id="nav-analytics">📊 Analytics</div>
+    <div class="nav-outlet">
+      <div class="outlet-lbl">Outlet</div>
+      <select class="outlet-sel">
+        <option>Rossa · Main Street</option>
+        <option>Rossa · Midtown</option>
+      </select>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-title">Reservations</div>
+        <div style="font-size:12px;color:#bbb;font-weight:500">Fri 7 Mar · Rossa Main Street</div>
+      </div>
+      <div class="topbar-right">
+        <button class="tb-btn ghost" onclick="openModal()">+ Log Missed Booking</button>
+        <div class="notif-btn">🔔<div class="n-dot"></div></div>
+        <div class="avatar">A</div>
+      </div>
+    </div>
+
+    <!-- controls -->
+    <div class="controls">
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-tab="all" onclick="switchTab(this)">All <span class="tab-count" id="tc-all">24</span></div>
+        <div class="tab" data-tab="pending" onclick="switchTab(this)">Pending <span class="tab-count red" id="tc-pending">3</span></div>
+        <div class="tab" data-tab="confirmed" onclick="switchTab(this)">Confirmed <span class="tab-count" id="tc-confirmed">18</span></div>
+        <div class="tab" data-tab="today" onclick="switchTab(this)">Today <span class="tab-count" id="tc-today">24</span></div>
+        <div class="tab" data-tab="cancelled" onclick="switchTab(this)">Cancelled <span class="tab-count" id="tc-cancelled">3</span></div>
+      </div>
+      <div class="controls-right">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Search guest or phone…" oninput="filterSearch(this.value)">
+        </div>
+        <button class="sort-btn" onclick="toggleSort()">Sort: Time ↑</button>
+      </div>
+    </div>
+
+    <!-- content area -->
+    <div class="content-area">
+      <!-- table -->
+      <div class="table-section" id="table-section">
+        <div class="table-scroll">
+          <table class="resv-table" id="resv-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Guest</th>
+                <th>Date & Time</th>
+                <th>Party</th>
+                <th>Source</th>
+                <th>AI Label</th>
+                <th>Timer / Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- slide-over -->
+      <div class="slideover" id="slideover">
+        <div class="so-header">
+          <div>
+            <div class="so-guest-name" id="so-name">—</div>
+            <div class="so-meta" id="so-meta">—</div>
+          </div>
+          <button class="so-close" onclick="closePanel()">✕</button>
+        </div>
+        <div class="so-body" id="so-body"></div>
+        <div class="so-actions" id="so-actions"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOG MISSED BOOKING MODAL ── -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="maybeClose(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Log Missed Booking</div>
+      <button class="so-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#f9f8f5;border:2px solid #e0ddd5;border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:13px;color:#888;line-height:1.5">
+        For reservations taken outside the AI — missed calls, walk-ins, or phone bookings taken by staff. Appears as <strong style="color:var(--black)">Confirmed · Manual</strong> immediately.
+      </div>
+      <div class="mfield-row">
+        <div class="mfield"><label>Guest Name <span style="color:#e55">*</span></label><input type="text" placeholder="e.g. Priya Mehta" id="m-name"></div>
+        <div class="mfield"><label>Guest Phone <span style="color:#e55">*</span></label><input type="tel" placeholder="(212) 555-0000" id="m-phone"></div>
+      </div>
+      <div class="mfield-row">
+        <div class="mfield"><label>Date <span style="color:#e55">*</span></label><input type="date" id="m-date" value="2025-03-07"></div>
+        <div class="mfield"><label>Time <span style="color:#e55">*</span></label><input type="time" id="m-time" value="20:00"></div>
+      </div>
+      <div class="mfield-row">
+        <div class="mfield"><label>Party Size <span style="color:#e55">*</span></label><input type="number" min="1" max="100" value="2" id="m-party"></div>
+        <div class="mfield"><label>Guest Email <span style="color:#888;font-weight:400;text-transform:none">optional</span></label><input type="email" placeholder="guest@email.com"></div>
+      </div>
+      <div class="mfield"><label>Special Requests <span style="color:#888;font-weight:400;text-transform:none">optional</span></label><textarea rows="2" placeholder="Any dietary needs, occasions, seating preferences…" style="resize:none"></textarea></div>
+      <div class="mfield">
+        <label>Send Confirmation SMS to Guest</label>
+        <label class="sms-toggle">
+          <div class="sms-toggle-label">
+            Send SMS confirmation
+            <div class="sms-toggle-sub">Guest will receive a booking confirmed message</div>
+          </div>
+          <label class="toggle-sw">
+            <input type="checkbox" checked>
+            <div class="tsw-track"></div>
+            <div class="tsw-thumb"></div>
+          </label>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="tb-btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="tb-btn primary" onclick="submitMissed()">Log Booking →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ───────────────────────────────────────────────────
+// DATA
+// ───────────────────────────────────────────────────
+const NOW_MIN = 19 * 60 + 42; // 7:42 PM in minutes
+
+let reservations = [
+  { id:1,  status:'pending',   name:'Priya Mehta',     phone:'(212) 555-0134', guests:4,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'Birthday dinner, window table',       returning:false, timer:402, sms:'delivered', notes:'', email:'priya@email.com' },
+  { id:2,  status:'pending',   name:'James Okafor',    phone:'(646) 555-0291', guests:2,  time:'20:30', date:'Fri 7 Mar', source:'voice',  label:'Anniversary dinner, gluten-free',      returning:true,  timer:555, sms:'delivered', notes:'', email:'' },
+  { id:3,  status:'pending',   name:'Samantha Lee',    phone:'(917) 555-0088', guests:6,  time:'21:00', date:'Fri 7 Mar', source:'voice',  label:'Business dinner, private area',        returning:false, timer:591, sms:'delivered', notes:'', email:'' },
+  { id:4,  status:'confirmed', name:'Carlos Reyes',    phone:'(212) 555-0772', guests:3,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'Dinner for 3',                         returning:true,  timer:null, sms:'delivered', notes:'Regular. Likes table 6.', email:'' },
+  { id:5,  status:'confirmed', name:'Natalie Chen',    phone:'(347) 555-0156', guests:2,  time:'21:30', date:'Fri 7 Mar', source:'voice',  label:'First visit, early evening',           returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:6,  status:'confirmed', name:'Tom Fitzgerald',  phone:'(212) 555-0411', guests:5,  time:'19:30', date:'Fri 7 Mar', source:'voice',  label:'Group dinner, no allergies',           returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:7,  status:'confirmed', name:'Aisha Patel',     phone:'(917) 555-0322', guests:2,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'Quiet table requested',                returning:false, timer:null, sms:'failed',    notes:'', email:'' },
+  { id:8,  status:'confirmed', name:'Ravi Sharma',     phone:'(212) 555-0599', guests:4,  time:'20:30', date:'Fri 7 Mar', source:'manual', label:'Manually logged',                      returning:true,  timer:null, sms:'delivered', notes:'Took booking by phone during lunch.', email:'' },
+  { id:9,  status:'confirmed', name:'Lucy Thompson',   phone:'(646) 555-0877', guests:3,  time:'21:00', date:'Fri 7 Mar', source:'voice',  label:'3 guests, no special requests',        returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:10, status:'confirmed', name:'David Park',      phone:'(212) 555-0203', guests:8,  time:'19:00', date:'Fri 7 Mar', source:'voice',  label:'Large group, birthday cake arranged',  returning:false, timer:null, sms:'delivered', notes:'Confirmed cake pickup at 6pm.', email:'' },
+  { id:11, status:'confirmed', name:'Mei Lin',         phone:'(917) 555-0741', guests:2,  time:'20:30', date:'Fri 7 Mar', source:'voice',  label:'Dinner for 2, peanut allergy noted',   returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:12, status:'confirmed', name:'Omar Hassan',     phone:'(212) 555-0356', guests:4,  time:'21:30', date:'Fri 7 Mar', source:'voice',  label:'Late dinner, outdoor preference',      returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:13, status:'confirmed', name:'Sofia Rossi',     phone:'(646) 555-0128', guests:2,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'Anniversary, champagne requested',     returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:14, status:'confirmed', name:'Kevin Nkrumah',   phone:'(917) 555-0490', guests:6,  time:'19:30', date:'Fri 7 Mar', source:'voice',  label:'Work team dinner',                     returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:15, status:'confirmed', name:'Hannah Weiss',    phone:'(212) 555-0667', guests:3,  time:'21:00', date:'Fri 7 Mar', source:'manual', label:'Manually logged',                      returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:16, status:'confirmed', name:'Arjun Kapoor',    phone:'(646) 555-0934', guests:2,  time:'20:30', date:'Fri 7 Mar', source:'voice',  label:'Dinner, vegetarian menu query',        returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:17, status:'confirmed', name:'Elena Smirnova',  phone:'(212) 555-0811', guests:4,  time:'21:30', date:'Fri 7 Mar', source:'voice',  label:'4 guests, window table',               returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:18, status:'confirmed', name:'Marcus Brown',    phone:'(917) 555-0155', guests:2,  time:'19:00', date:'Fri 7 Mar', source:'voice',  label:'Early dinner, two guests',             returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:19, status:'confirmed', name:'Zara Ahmed',      phone:'(646) 555-0273', guests:5,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'5 guests, halal options asked',        returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:20, status:'confirmed', name:'Patrick O\'Brien',phone:'(212) 555-0388', guests:2,  time:'21:00', date:'Fri 7 Mar', source:'voice',  label:'Dinner for 2',                         returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:21, status:'confirmed', name:'Yuki Tanaka',     phone:'(917) 555-0620', guests:3,  time:'20:30', date:'Fri 7 Mar', source:'voice',  label:'3 guests, sake pairing interest',      returning:true,  timer:null, sms:'delivered', notes:'', email:'' },
+  { id:22, status:'cancelled', name:'Ben Harris',      phone:'(212) 555-0477', guests:4,  time:'19:00', date:'Fri 7 Mar', source:'voice',  label:'Cancelled — fully booked response',    returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:23, status:'cancelled', name:'Nina Petrov',     phone:'(646) 555-0539', guests:2,  time:'20:00', date:'Fri 7 Mar', source:'voice',  label:'Declined by owner',                    returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+  { id:24, status:'expired',   name:'Raj Kumar',       phone:'(917) 555-0701', guests:3,  time:'20:30', date:'Fri 7 Mar', source:'voice',  label:'Expired — no action within 10 min',   returning:false, timer:null, sms:'delivered', notes:'', email:'' },
+];
+
+// Transcripts per reservation id
+const transcripts = {
+  1: [
+    {role:'agent', text:"Hi, you've reached Rossa Main Street! I'm the AI assistant here. I can take a reservation or answer questions. How can I help?"},
+    {role:'caller', text:"Hi yes I'd like to book a table for Saturday please."},
+    {role:'agent', text:"Of course! What name should I put the reservation under?"},
+    {role:'caller', text:"It's Priya Mehta."},
+    {role:'agent', text:"Got it, Priya. And how many guests will be joining you?"},
+    {role:'caller', text:"Four of us. Oh and it's actually a birthday dinner — is it possible to get a window table?"},
+    {role:'agent', text:"Lovely! I'll make sure to note the birthday and the window table preference. What time works for you?"},
+    {role:'caller', text:"Around 8 o'clock?"},
+    {role:'agent', text:"Perfect. So that's Priya Mehta, 4 guests, Friday the 7th of March at 8 PM, window table, birthday celebration. Does that look right?"},
+    {role:'caller', text:"Yes that's perfect, thank you!"},
+    {role:'agent', text:"Wonderful! You'll receive a text confirmation shortly. Have a lovely evening!"},
+  ],
+  2: [
+    {role:'agent', text:"Hi, Rossa Main Street — how can I help?"},
+    {role:'caller', text:"I'd like to make a reservation for two."},
+    {role:'agent', text:"Of course! Name for the booking?"},
+    {role:'caller', text:"James Okafor."},
+    {role:'agent', text:"Great, James. What date and time?"},
+    {role:'caller', text:"Friday 7th, 8:30 in the evening."},
+    {role:'agent', text:"And any special requests?"},
+    {role:'caller', text:"It's our anniversary. Also my wife is gluten-free, is that okay?"},
+    {role:'agent', text:"Congratulations! I'll note that and flag the gluten-free requirement. So that's James Okafor, 2 guests, Friday 7th at 8:30 PM, anniversary, gluten-free. Shall I confirm that?"},
+    {role:'caller', text:"Yes please."},
+  ],
+};
+
+let currentTab = 'all';
+let selectedId = null;
+
+// ───────────────────────────────────────────────────
+// RENDER TABLE
+// ───────────────────────────────────────────────────
+function filteredRows(tab, query='') {
+  let rows = [...reservations];
+  if (tab === 'pending')   rows = rows.filter(r => r.status === 'pending');
+  if (tab === 'confirmed') rows = rows.filter(r => r.status === 'confirmed');
+  if (tab === 'today')     rows = rows.filter(r => r.date === 'Fri 7 Mar');
+  if (tab === 'cancelled') rows = rows.filter(r => r.status === 'cancelled' || r.status === 'expired');
+  if (query) { const q = query.toLowerCase(); rows = rows.filter(r => r.name.toLowerCase().includes(q) || r.phone.includes(q)); }
+  return rows;
+}
+
+function renderTable() {
+  const rows = filteredRows(currentTab, currentSearch);
+  const tbody = document.getElementById('tbody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No reservations here</div><div class="empty-sub">Try a different tab or search term</div></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(r => rowHTML(r)).join('');
+  updateCounts();
+}
+
+function rowHTML(r) {
+  const isSelected = selectedId === r.id;
+  const badge = badgeHTML(r.status);
+  const timerHTML = r.timer !== null
+    ? `<span class="timer ${timerClass(r.timer)}" data-id="${r.id}">${fmtTimer(r.timer)}</span>`
+    : '';
+  const actionsHTML = r.status === 'pending'
+    ? `<div class="row-actions" style="margin-top:6px">
+        <button class="act act-confirm" onclick="event.stopPropagation();confirmRow(${r.id})">Confirm</button>
+        <button class="act act-decline" onclick="event.stopPropagation();declineRow(${r.id})">Decline</button>
+        <button class="act act-hold"    onclick="event.stopPropagation();holdRow(${r.id})">Hold</button>
+       </div>` : '';
+  const src = r.source === 'voice'
+    ? `<span class="source-badge voice">🎙 Voice</span>`
+    : `<span class="source-badge">✍ Manual</span>`;
+  const ret = r.returning ? `<span class="returning-flag">↩ Returning</span>` : '';
+
+  return `<tr class="${isSelected?'selected':''}" onclick="openPanel(${r.id})" data-id="${r.id}">
+    <td>${badge}</td>
+    <td><div class="guest-name">${r.name}${ret}</div><div class="guest-detail">${r.phone}</div></td>
+    <td><div style="font-size:14px;font-weight:700;color:var(--black);font-family:'Space Grotesk',sans-serif">${r.time}</div><div style="font-size:12px;color:#aaa;margin-top:2px">${r.date}</div></td>
+    <td><div style="font-size:20px;font-weight:900;color:var(--black);font-family:'Space Grotesk',sans-serif">${r.guests}</div></td>
+    <td>${src}</td>
+    <td><div style="font-size:12px;color:#666;line-height:1.4;max-width:200px">${r.label}</div></td>
+    <td><div>${timerHTML}</div>${actionsHTML}</td>
+  </tr>`;
+}
+
+function badgeHTML(s) {
+  const map = { pending:'b-pending', confirmed:'b-confirmed', cancelled:'b-cancelled', expired:'b-expired', manual:'b-manual' };
+  const labels = { pending:'Pending', confirmed:'Confirmed', cancelled:'Cancelled', expired:'Expired' };
+  const dots = { pending:'🟡', confirmed:'🟢', cancelled:'⚪', expired:'🔴' };
+  return `<span class="badge ${map[s]}">${dots[s]} ${labels[s]}</span>`;
+}
+
+function timerClass(sec) {
+  if (sec < 120) return 'urgent';
+  if (sec < 300) return 'warn';
+  return 'ok';
+}
+function fmtTimer(sec) {
+  const m = Math.floor(sec/60), s = sec % 60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function updateCounts() {
+  document.getElementById('tc-all').textContent       = reservations.length;
+  document.getElementById('tc-pending').textContent   = reservations.filter(r=>r.status==='pending').length;
+  document.getElementById('tc-confirmed').textContent = reservations.filter(r=>r.status==='confirmed').length;
+  document.getElementById('tc-today').textContent     = reservations.filter(r=>r.date==='Fri 7 Mar').length;
+  document.getElementById('tc-cancelled').textContent = reservations.filter(r=>r.status==='cancelled'||r.status==='expired').length;
+  // update nav badge
+  const pendingCount = reservations.filter(r=>r.status==='pending').length;
+  const nb = document.querySelector('.nav-badge');
+  if (nb) { nb.textContent = pendingCount || ''; nb.style.display = pendingCount ? '' : 'none'; }
+}
+
+// ───────────────────────────────────────────────────
+// SLIDE-OVER PANEL
+// ───────────────────────────────────────────────────
+function openPanel(id) {
+  selectedId = id;
+  const r = reservations.find(x=>x.id===id);
+  if (!r) return;
+
+  document.getElementById('slideover').classList.add('open');
+  document.getElementById('so-name').textContent = r.name;
+  document.getElementById('so-meta').textContent = `${r.date} · ${r.time} · ${r.guests} guests · ${r.source === 'voice' ? 'Voice booking' : 'Manual'}`;
+
+  // highlight row
+  document.querySelectorAll('.resv-table tbody tr').forEach(tr => {
+    tr.classList.toggle('selected', parseInt(tr.dataset.id) === id);
+  });
+
+  renderPanelBody(r);
+  renderPanelActions(r);
+}
+
+function renderPanelBody(r) {
+  const tx = transcripts[r.id];
+  const txHTML = tx
+    ? tx.map(m => `<div class="msg ${m.role}">
+        <div class="msg-avatar">${m.role==='agent'?'AI':'G'}</div>
+        <div><div class="msg-bubble">${m.text}</div><div class="msg-who">${m.role==='agent'?'Nova · AI Agent':'Caller'}</div></div>
+      </div>`).join('')
+    : `<div style="font-size:13px;color:#aaa;padding:12px 0">Transcript not available for this reservation.</div>`;
+
+  const smsHTML = r.sms === 'delivered'
+    ? `<span class="sms-status sms-ok">✓ SMS Delivered</span>`
+    : `<span class="sms-status sms-fail">✕ SMS Failed — call guest</span>`;
+
+  const timelineHTML = timelineForStatus(r);
+
+  const specialReqs = r.label.includes('birthday') ? 'Birthday dinner celebration, window table preference' :
+    r.label.includes('anniversary') ? 'Anniversary dinner, gluten-free required' :
+    r.label.includes('allergy') ? 'Peanut allergy noted — kitchen must be informed' :
+    r.label.includes('halal') ? 'Halal options requested' : null;
+
+  document.getElementById('so-body').innerHTML = `
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-label">Date & Time</div>
+        <div class="info-value large">${r.time}</div>
+        <div style="font-size:12px;color:#aaa;margin-top:2px">${r.date}</div>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Party Size</div>
+        <div class="info-value large">${r.guests} guests</div>
+        ${r.returning ? '<div style="font-size:11px;color:#aaa;margin-top:2px">↩ Returning guest</div>' : '<div style="font-size:11px;color:#aaa;margin-top:2px">First visit</div>'}
+      </div>
+      <div class="info-cell">
+        <div class="info-label">Phone</div>
+        <div class="info-value mono" style="font-size:14px">${r.phone}</div>
+        <button class="call-btn" onclick="callGuest('${r.phone}')">📞 Call Guest</button>
+      </div>
+      <div class="info-cell">
+        <div class="info-label">SMS Status</div>
+        <div style="margin-top:6px">${smsHTML}</div>
+      </div>
+      <div class="info-cell full">
+        <div class="info-label">AI Call Label</div>
+        <div class="info-value" style="font-size:13px">${r.label}</div>
+      </div>
+    </div>
+
+    ${specialReqs ? `<div class="sr-box">
+      <div class="sr-label">⚠ Special Requests</div>
+      <div class="sr-text">${specialReqs}</div>
+    </div>` : ''}
+
+    <div class="transcript-section">
+      <div class="section-hdr">Call Transcript</div>
+      <div class="transcript">${txHTML}</div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div class="section-hdr">Internal Notes</div>
+      <textarea class="notes-area" rows="3" placeholder="Add a note visible only to your team…" onblur="saveNote(${r.id},this.value)">${r.notes}</textarea>
+    </div>
+
+    <div>
+      <div class="section-hdr">Status Timeline</div>
+      <div class="timeline">${timelineHTML}</div>
+    </div>
+  `;
+}
+
+function timelineForStatus(r) {
+  const events = [
+    { label: 'Request created by AI', time: '7:36 PM', done: true },
+    { label: 'SMS sent to guest', time: '7:36 PM', done: true },
+    { label: r.status === 'confirmed' ? 'Confirmed by owner' : r.status === 'cancelled' ? 'Declined by owner' : r.status === 'expired' ? 'Expired — no action' : 'Awaiting owner action', time: r.status === 'pending' ? 'Pending…' : '7:38 PM', done: r.status !== 'pending', now: r.status === 'pending' },
+    { label: 'Confirmation SMS to guest', time: r.status === 'confirmed' ? '7:38 PM' : '—', done: r.status === 'confirmed', wait: r.status !== 'confirmed' },
+  ];
+  return events.map(e => `
+    <div class="tl-item">
+      <div class="tl-dot ${e.done?'done':e.now?'now':'wait'}">${e.done?'✓':e.now?'●':''}</div>
+      <div class="tl-info">
+        <div class="tl-label">${e.label}</div>
+        <div class="tl-time">${e.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPanelActions(r) {
+  const acts = document.getElementById('so-actions');
+  if (r.status === 'pending') {
+    acts.innerHTML = `
+      <div class="so-action-row">
+        <button class="so-btn confirm" onclick="confirmRow(${r.id})">✓ Confirm Reservation</button>
+        <button class="so-btn hold"    onclick="holdRow(${r.id})">⏸ Hold</button>
+      </div>
+      <div class="so-action-row">
+        <button class="so-btn decline" onclick="declineRow(${r.id})">✕ Decline</button>
+        <button class="so-btn call"    onclick="callGuest('${r.phone}')">📞 Call Guest</button>
+      </div>`;
+  } else if (r.status === 'confirmed') {
+    acts.innerHTML = `
+      <div class="so-action-row">
+        <button class="so-btn call"   onclick="callGuest('${r.phone}')">📞 Call Guest</button>
+        <button class="so-btn cancel" onclick="cancelRow(${r.id})">Cancel Reservation</button>
+      </div>`;
+  } else {
+    acts.innerHTML = `
+      <div class="so-action-row">
+        <button class="so-btn call" onclick="callGuest('${r.phone}')">📞 Call Guest</button>
+      </div>`;
+  }
+}
+
+function closePanel() {
+  selectedId = null;
+  document.getElementById('slideover').classList.remove('open');
+  document.querySelectorAll('.resv-table tbody tr').forEach(tr => tr.classList.remove('selected'));
+}
+
+// ───────────────────────────────────────────────────
+// ACTIONS
+// ───────────────────────────────────────────────────
+function confirmRow(id) {
+  const r = reservations.find(x=>x.id===id);
+  if (!r) return;
+  r.status = 'confirmed'; r.timer = null;
+  toast('success', `✓ ${r.name}'s reservation confirmed. SMS sent.`);
+  renderTable();
+  if (selectedId === id) { openPanel(id); }
+}
+
+function declineRow(id) {
+  const r = reservations.find(x=>x.id===id);
+  if (!r) return;
+  r.status = 'cancelled'; r.timer = null;
+  toast('warning', `${r.name}'s reservation declined.`);
+  renderTable();
+  if (selectedId === id) { openPanel(id); }
+  else closePanel();
+}
+
+function holdRow(id) {
+  const r = reservations.find(x=>x.id===id);
+  if (!r || r.status !== 'pending') return;
+  r._held = true;
+  toast('warning', `⏸ ${r.name}'s request on hold for 5 minutes.`);
+  // visual only — timer still runs
+}
+
+function cancelRow(id) {
+  const r = reservations.find(x=>x.id===id);
+  if (!r) return;
+  r.status = 'cancelled';
+  toast('error', `${r.name}'s confirmed reservation cancelled.`);
+  renderTable();
+  if (selectedId === id) { openPanel(id); }
+}
+
+function callGuest(phone) {
+  toast('success', `📞 Opening dialler for ${phone}`);
+}
+
+function saveNote(id, val) {
+  const r = reservations.find(x=>x.id===id);
+  if (r) { r.notes = val; toast('success', 'Note saved.'); }
+}
+
+// ───────────────────────────────────────────────────
+// TABS, SEARCH, SORT
+// ───────────────────────────────────────────────────
+let currentSearch = '';
+let sortAsc = true;
+
+function switchTab(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = el.dataset.tab;
+  closePanel();
+  renderTable();
+}
+
+function filterSearch(q) {
+  currentSearch = q;
+  renderTable();
+}
+
+function toggleSort() {
+  sortAsc = !sortAsc;
+  reservations.sort((a,b) => {
+    const at = a.time.replace(':',''), bt = b.time.replace(':','');
+    return sortAsc ? at - bt : bt - at;
+  });
+  document.querySelector('.sort-btn').textContent = `Sort: Time ${sortAsc?'↑':'↓'}`;
+  renderTable();
+}
+
+// ───────────────────────────────────────────────────
+// COUNTDOWN TIMER
+// ───────────────────────────────────────────────────
+setInterval(() => {
+  let changed = false;
+  reservations.forEach(r => {
+    if (r.timer !== null && r.timer > 0) { r.timer--; changed = true; }
+    else if (r.timer === 0 && r.status === 'pending') {
+      r.status = 'expired'; r.timer = null; changed = true;
+      toast('error', `⏰ ${r.name}'s request expired — no action taken.`);
+      if (selectedId === r.id) openPanel(r.id);
+    }
+  });
+  if (changed) {
+    // update timers in DOM without full re-render
+    document.querySelectorAll('.timer[data-id]').forEach(el => {
+      const id = parseInt(el.dataset.id);
+      const r = reservations.find(x=>x.id===id);
+      if (r && r.timer !== null) {
+        el.textContent = fmtTimer(r.timer);
+        el.className = `timer ${timerClass(r.timer)}`;
+      }
+    });
+    updateCounts();
+  }
+}, 1000);
+
+// ───────────────────────────────────────────────────
+// MODAL
+// ───────────────────────────────────────────────────
+function openModal() { document.getElementById('modal-backdrop').classList.add('open'); }
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+function maybeClose(e) { if (e.target === document.getElementById('modal-backdrop')) closeModal(); }
+
+function submitMissed() {
+  const name  = document.getElementById('m-name').value.trim();
+  const phone = document.getElementById('m-phone').value.trim();
+  const date  = document.getElementById('m-date').value;
+  const time  = document.getElementById('m-time').value;
+  const party = parseInt(document.getElementById('m-party').value);
+  if (!name || !phone || !date || !time || !party) { toast('error', 'Please fill all required fields.'); return; }
+  const newR = {
+    id: reservations.length + 1, status:'confirmed', name, phone, guests: party,
+    time, date:'Fri 7 Mar', source:'manual', label:'Manually logged',
+    returning: false, timer: null, sms:'pending', notes:'', email:''
+  };
+  reservations.unshift(newR);
+  renderTable();
+  closeModal();
+  toast('success', `✓ Booking for ${name} logged as Confirmed.`);
+}
+
+// ───────────────────────────────────────────────────
+// TOAST
+// ───────────────────────────────────────────────────
+function toast(type, msg) {
+  const container = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span class="t-ic">${type==='success'?'✓':type==='warning'?'⚠':'✕'}</span><span>${msg}</span>`;
+  container.appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transform='translateX(20px)'; el.style.transition='all .3s'; setTimeout(()=>el.remove(), 300); }, 3500);
+}
+
+// ───────────────────────────────────────────────────
+// NAV
+// ───────────────────────────────────────────────────
+function setNav(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ───────────────────────────────────────────────────
+// INIT
+// ───────────────────────────────────────────────────
+renderTable();
+</script>
+</body>
+</html>
